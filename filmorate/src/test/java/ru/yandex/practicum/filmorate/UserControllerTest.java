@@ -107,7 +107,7 @@ public class UserControllerTest {
                 .contentType("application/json")
                  .content(inValidUser))
                 .andDo(print())
-                .andExpect(jsonPath("$.name", Matchers.containsString("ol5ga")));
+                .andExpect(jsonPath("$.name", Matchers.containsString(invalid.getLogin())));
 
     }
 
