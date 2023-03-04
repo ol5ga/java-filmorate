@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Users;
 
@@ -48,7 +49,7 @@ public class UserController {
                     allUsers.remove(user);
                     allUsers.add(updateUser);
                 } else{
-                    throw new ValidationException("Такого пользователя не существует");
+                    throw new ChangeException("Такого пользователя не существует");
                 }
                 log.info("Изменение пользователя");
 

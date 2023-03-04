@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -41,7 +42,7 @@ public class FilmController {
                     allFilms.remove(film);
                     allFilms.add(updateFilm);
                 } else{
-                    throw new ValidationException("Такого фильма нет в базе");
+                    throw new ChangeException("Такого фильма нет в базе");
                 }
                 log.info("Изменение пользователя");
             }
