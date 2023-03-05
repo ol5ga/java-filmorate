@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 
 @Data
-public class Users {
+public class User {
 
     private int id;
     private final String email;

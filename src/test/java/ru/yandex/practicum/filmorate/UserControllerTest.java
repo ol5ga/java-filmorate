@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.model.Users;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
@@ -34,7 +34,7 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testValidation() {
-        Users valid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
         mockMvc.perform(post("/users")
@@ -48,13 +48,13 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongEmail() {
-        Users valid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        Users invalid = new Users(" ", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid = new User(" ", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
-        Users invalid2 = new Users("ol5ga", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid2 = new User("ol5ga", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         invalid.setId(3);
         String inValidUser2 = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -72,13 +72,13 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongLogin() {
-        Users valid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        Users invalid = new Users("ol5ga@bk.ru", " ", "Ольга",LocalDate.of(1989,2,22));
+        User invalid = new User("ol5ga@bk.ru", " ", "Ольга",LocalDate.of(1989,2,22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
-        Users invalid2 = new Users("ol5ga@bk.ru", "ol5  ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid2 = new User("ol5ga@bk.ru", "ol5  ga", "Ольга",LocalDate.of(1989,2,22));
         invalid.setId(3);
         String inValidUser2 = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -97,10 +97,10 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongName() {
-        Users valid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        Users invalid = new Users("ol5ga@bk.ru", "ol5ga", " ",LocalDate.of(1989,2,22));
+        User invalid = new User("ol5ga@bk.ru", "ol5ga", " ",LocalDate.of(1989,2,22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -114,10 +114,10 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongBirthday() {
-        Users valid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        Users invalid = new Users("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(2024,2,22));
+        User invalid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(2024,2,22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")

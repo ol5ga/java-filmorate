@@ -1,64 +1,66 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Users;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
-    int idGenerate = 0;
-    private List<Users> allUsers = new ArrayList<>();
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private int idGenerate = 0;
+    private Map<Integer, User> allUsers = new HashMap<>();
 
     @GetMapping()
-    public List<Users> getAllUsers() {
-        return allUsers;
+    public List<User> getAllUsers() {
+
+        return new ArrayList<User>(allUsers.values());
     }
 
 
     @PostMapping
-    public Users create(@RequestBody Users user) {
+    public User create(@RequestBody User user) {
         if (validate(user)) {
             if(user.getName() == null || user.getName().isBlank()) {
-                user = new Users(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());
+                user = new User(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());
             }
             user.setId(++idGenerate);
-            allUsers.add(user);
+            allUsers.put(user.getId(),user);
             log.info("Добавление пользователя");
 
         } return user;
     }
 
     @PutMapping
-    public Users updateUser(@RequestBody Users updateUser){
+    public User updateUser(@RequestBody User updateUser){
         if (validate(updateUser)) {
             if(updateUser.getName() == null || updateUser.getName().isBlank()) {
-                updateUser = new Users(updateUser.getEmail(), updateUser.getLogin(), updateUser.getLogin(), updateUser.getBirthday());
+                updateUser = new User(updateUser.getEmail(), updateUser.getLogin(), updateUser.getLogin(), updateUser.getBirthday());
             }
-            for (Users user : allUsers) {
-                if (user.getId() == updateUser.getId()) {
-                    allUsers.remove(user);
-                    allUsers.add(updateUser);
+
+                if (allUsers.containsKey(updateUser.getId())) {
+                    allUsers.remove(updateUser.getId());
+                    allUsers.put(updateUser.getId(),updateUser);
                 } else{
                     throw new ChangeException("Такого пользователя не существует");
                 }
                 log.info("Изменение пользователя");
 
-            }
+
         } return updateUser;
 
     }
 
-    private boolean validate(Users user){
+    private boolean validate(User user){
         if (user.getEmail() == null || user.getEmail().isBlank()){
             throw new ValidationException("Неверный e-mail");
         } else if(!user.getEmail().contains("@")){
