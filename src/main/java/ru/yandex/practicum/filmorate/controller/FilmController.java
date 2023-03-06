@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -22,6 +19,7 @@ import java.util.Map;
 public class FilmController {
     private int idGenerate = 0;
     private Map<Integer, Film> allFilms = new HashMap<>();
+    public static final LocalDate RELEASE_DATE = LocalDate.of(1895,12,28);
 
     @GetMapping()
     public List<Film> getAllFilms() {
@@ -57,15 +55,9 @@ public class FilmController {
     }
 
     private boolean validate(Film film){
-//        if (film.getName() == null || film.getName().isBlank()){
-//            throw new ValidationException("Название не может быть пустым");
-//        } else if(film.getDescription().length()>200){
-//            throw new ValidationException("Описание не должно быть длинее 200 символов");
-//        } else
-        if(film.getReleaseDate().isBefore(LocalDate.of(1895,12,28))){
+
+        if(film.getReleaseDate().isBefore(RELEASE_DATE)){
             throw new ValidationException("Дата релиза не верна");
-//        } else if(film.getDuration() <= 0){
-//            throw new ValidationException("Длительность фильма не может быть отрицательной");
         } else{
             return true;
         }

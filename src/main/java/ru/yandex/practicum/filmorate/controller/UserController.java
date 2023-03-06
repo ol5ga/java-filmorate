@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +28,9 @@ public class UserController {
 
 
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User create(@RequestBody @Valid User user) {
         if (validate(user)) {
-            if(user.getName() == null || user.getName().isBlank()) {
+            if(checkName(user)) {
                 user = new User(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());
             }
             user.setId(++idGenerate);
@@ -41,9 +41,9 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User updateUser){
+    public User updateUser(@RequestBody @Valid User updateUser){
         if (validate(updateUser)) {
-            if(updateUser.getName() == null || updateUser.getName().isBlank()) {
+            if(checkName(updateUser)) {
                 updateUser = new User(updateUser.getEmail(), updateUser.getLogin(), updateUser.getLogin(), updateUser.getBirthday());
             }
 
@@ -61,16 +61,16 @@ public class UserController {
     }
 
     private boolean validate(User user){
-        if (user.getEmail() == null || user.getEmail().isBlank()){
-            throw new ValidationException("Неверный e-mail");
-        } else if(!user.getEmail().contains("@")){
-            throw new ValidationException("Неверный e-mail");
-        } else if(user.getLogin().isBlank() || user.getLogin().contains(" ")){
+        if(user.getLogin().contains(" ")){
             throw new ValidationException("Неверный login");
-        } else if(user.getBirthday().isAfter(LocalDate.now())){
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        } else {
+        }return true;
+    }
+
+    private boolean checkName(User user){
+        if(user.getName() == null || user.getName().isBlank()){
             return true;
+        } else {
+            return false;
         }
     }
 
