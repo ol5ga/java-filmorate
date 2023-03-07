@@ -19,7 +19,7 @@ import java.util.Map;
 public class FilmController {
     private int idGenerate = 0;
     private Map<Integer, Film> allFilms = new HashMap<>();
-    public static final LocalDate RELEASE_DATE = LocalDate.of(1895,12,28);
+    private static final LocalDate RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     @GetMapping()
     public List<Film> getAllFilms() {
@@ -30,36 +30,32 @@ public class FilmController {
 
     @PostMapping
     public Film create(@RequestBody @Valid Film film) {
-        if (validate(film)) {
-            film.setId(++idGenerate);
-            allFilms.put(film.getId(),film);
-            log.info("Добавление пользователя");
-        }
+        validate(film);
+        film.setId(++idGenerate);
+        allFilms.put(film.getId(), film);
+        log.info("Добавление пользователя");
+
         return film;
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody @Valid Film updateFilm){
-        if (validate(updateFilm)) {
+    public Film updateFilm(@RequestBody @Valid Film updateFilm) {
+        validate(updateFilm);
 
-                if (allFilms.containsKey(updateFilm.getId())) {
-                    allFilms.remove(updateFilm.getId());
-                    allFilms.put(updateFilm.getId(),updateFilm);
-                } else{
-                    throw new ChangeException("Такого фильма нет в базе");
+        if (allFilms.containsKey(updateFilm.getId())) {
+            allFilms.put(updateFilm.getId(), updateFilm);
+        } else {
+            throw new ChangeException("Такого фильма нет в базе");
 
-                }
-                log.info("Изменение пользователя");
         }
+        log.info("Изменение пользователя");
+
         return updateFilm;
     }
 
-    private boolean validate(Film film){
-
-        if(film.getReleaseDate().isBefore(RELEASE_DATE)){
+    private void validate(Film film) {
+        if (film.getReleaseDate().isBefore(RELEASE_DATE)) {
             throw new ValidationException("Дата релиза не верна");
-        } else{
-            return true;
         }
     }
 

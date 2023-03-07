@@ -29,49 +29,40 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody @Valid User user) {
-        if (validate(user)) {
-            if(checkName(user)) {
-                user = new User(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());
-            }
-            user.setId(++idGenerate);
-            allUsers.put(user.getId(),user);
-            log.info("Добавление пользователя");
-
-        } return user;
+        validate(user);
+        user = checkName(user);
+        user.setId(++idGenerate);
+        allUsers.put(user.getId(), user);
+        log.info("Добавление пользователя");
+       return user;
     }
 
     @PutMapping
-    public User updateUser(@RequestBody @Valid User updateUser){
-        if (validate(updateUser)) {
-            if(checkName(updateUser)) {
-                updateUser = new User(updateUser.getEmail(), updateUser.getLogin(), updateUser.getLogin(), updateUser.getBirthday());
-            }
-
-                if (allUsers.containsKey(updateUser.getId())) {
-                    allUsers.remove(updateUser.getId());
-                    allUsers.put(updateUser.getId(),updateUser);
-                } else{
-                    throw new ChangeException("Такого пользователя не существует");
-                }
-                log.info("Изменение пользователя");
-
-
-        } return updateUser;
-
-    }
-
-    private boolean validate(User user){
-        if(user.getLogin().contains(" ")){
-            throw new ValidationException("Неверный login");
-        }return true;
-    }
-
-    private boolean checkName(User user){
-        if(user.getName() == null || user.getName().isBlank()){
-            return true;
+    public User updateUser(@RequestBody @Valid User updateUser) {
+        validate(updateUser);
+        updateUser = checkName(updateUser);
+        if (allUsers.containsKey(updateUser.getId())) {
+            allUsers.put(updateUser.getId(), updateUser);
         } else {
-            return false;
+            throw new ChangeException("Такого пользователя не существует");
         }
+        log.info("Изменение пользователя");
+        return updateUser;
+
+    }
+
+    private void validate(User user) {
+        if (user.getLogin().contains(" ")) {
+            throw new ValidationException("Неверный login");
+        }
+
+    }
+
+    private User checkName(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
+            user = new User(user.getEmail(), user.getLogin(), user.getLogin(), user.getBirthday());
+        }
+        return user;
     }
 
 }
