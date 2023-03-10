@@ -1,10 +1,14 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -20,6 +24,16 @@ public class UserController {
     private int idGenerate = 0;
     private Map<Integer, User> allUsers = new HashMap<>();
 
+    private final UserService userService;
+    private final InMemoryFilmStorage storage;
+
+    @Autowired
+    public UserController(UserService userService,InMemoryFilmStorage storage){
+        this.userService= userService;
+        this.storage = storage;
+    }
+
+
     @GetMapping()
     public List<User> getAllUsers() {
 
@@ -29,6 +43,7 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody @Valid User user) {
+
         validate(user);
         user = checkName(user);
         user.setId(++idGenerate);
