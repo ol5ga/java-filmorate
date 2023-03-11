@@ -30,7 +30,7 @@ public class FilmController {
 
     @PostMapping
     public Film create(@RequestBody @Valid Film film) {
-        validate(film);
+//        validate(film);
         film.setId(++idGenerate);
         allFilms.put(film.getId(), film);
         log.info("Добавление пользователя");
@@ -40,7 +40,7 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@RequestBody @Valid Film updateFilm) {
-        validate(updateFilm);
+//        validate(updateFilm);
 
         if (allFilms.containsKey(updateFilm.getId())) {
             allFilms.put(updateFilm.getId(), updateFilm);
