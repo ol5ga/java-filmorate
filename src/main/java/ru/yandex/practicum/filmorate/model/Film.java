@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import ru.yandex.practicum.filmorate.validate.Release;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class Film {
     @NotNull
     private final String description;
     @NotNull
+    @Release
     private final LocalDate releaseDate;
     @Positive
     private final int duration;

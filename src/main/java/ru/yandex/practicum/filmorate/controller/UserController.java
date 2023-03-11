@@ -2,19 +2,15 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -22,13 +18,11 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private int idGenerate = 0;
-    private Map<Integer, User> allUsers = new HashMap<>();
-
     private final UserService userService;
-    private final InMemoryFilmStorage storage;
+    private final InMemoryUserStorage storage;
 
     @Autowired
-    public UserController(UserService userService,InMemoryFilmStorage storage){
+    public UserController(UserService userService,InMemoryUserStorage storage){
         this.userService= userService;
         this.storage = storage;
     }
@@ -37,7 +31,7 @@ public class UserController {
     @GetMapping()
     public List<User> getAllUsers() {
 
-        return new ArrayList<User>(allUsers.values());
+        return new ArrayList<User>(storage.allUsers.values());
     }
 
 
@@ -47,7 +41,7 @@ public class UserController {
         validate(user);
         user = checkName(user);
         user.setId(++idGenerate);
-        allUsers.put(user.getId(), user);
+        storage.createUser(user);
         log.info("Добавление пользователя");
        return user;
     }
@@ -56,11 +50,7 @@ public class UserController {
     public User updateUser(@RequestBody @Valid User updateUser) {
         validate(updateUser);
         updateUser = checkName(updateUser);
-        if (allUsers.containsKey(updateUser.getId())) {
-            allUsers.put(updateUser.getId(), updateUser);
-        } else {
-            throw new ChangeException("Такого пользователя не существует");
-        }
+        storage.updateUser(updateUser);
         log.info("Изменение пользователя");
         return updateUser;
 
