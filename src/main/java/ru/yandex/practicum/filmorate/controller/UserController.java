@@ -56,6 +56,27 @@ public class UserController {
 
     }
 
+    @PutMapping
+    public void addFriend(){
+//    }users/{id}/friends/{friendId}
+    }
+
+    @DeleteMapping
+    public void deleteFriend() {
+//        /users/{id}/friends/{friendId}
+    }
+
+    @GetMapping
+    public List<Long> printFriends() {
+//            }users/{id}/friends
+        return new ArrayList<>();
+    }
+
+    @GetMapping
+    public List<Long> printCommonfriends() {
+//        users / {id} / friends / common / {otherId}
+        return new ArrayList<>();
+    }
     private void validate(User user) {
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Неверный login");
@@ -69,5 +90,7 @@ public class UserController {
         }
         return user;
     }
+
+
 
 }

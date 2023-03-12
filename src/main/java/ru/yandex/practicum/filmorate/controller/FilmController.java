@@ -49,6 +49,18 @@ public class FilmController {
         return updateFilm;
     }
 
+    @PutMapping
+    public void addLike(){
+//    /films/{id}/like/{userId}
+    }
 
+    @DeleteMapping
+    public void deleteLike(){
+//    /films/{id}/like/{userId}
+    }
 
+    @GetMapping
+    public void printTop(){
+//    /films/popular?count={count}
+    }
 }
