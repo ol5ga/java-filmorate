@@ -25,6 +25,6 @@ public class User {
     @NotNull
     private final LocalDate birthday;
 
-    private Set<Long> friends;
+   public Set<User> friends;
 
 }

@@ -17,50 +17,54 @@ import java.util.List;
 public class FilmController {
     private int idGenerate = 0;
     private final FilmService filmService;
-    private final InMemoryFilmStorage storage;
+
 
     @Autowired
-    public FilmController(FilmService filmService,InMemoryFilmStorage storage){
+    public FilmController(FilmService filmService){
         this.filmService= filmService;
-        this.storage = storage;
+
     }
 
     @GetMapping()
     public List<Film> getAllFilms() {
 
-        return new ArrayList<Film>(storage.allFilms.values());
+        return new ArrayList<Film>(filmService.getAllFilms());
     }
 
 
     @PostMapping
     public Film create(@RequestBody @Valid Film film) {
         film.setId(++idGenerate);
-        storage.createFilm(film);
-        log.info("Добавление пользователя");
+        filmService.createFilm(film);
+        log.info("Добавление фильма");
 
         return film;
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody @Valid Film updateFilm) {
-        storage.updateFilm(updateFilm);
-        log.info("Изменение пользователя");
+        filmService.updateFilm(updateFilm);
+        log.info("Изменение фильма");
 
         return updateFilm;
     }
 
-    @PutMapping
-    public void addLike(){
-//    /films/{id}/like/{userId}
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable int id, @PathVariable int userId){
+        filmService.addLike(id, userId);
+
     }
 
-    @DeleteMapping
-    public void deleteLike(){
-//    /films/{id}/like/{userId}
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable int id, int userId){
+        filmService.deleteLike(id, userId);
+
     }
 
-    @GetMapping
-    public void printTop(){
-//    /films/popular?count={count}
+    @GetMapping("/popular")
+    public List<Film> printTop(@RequestParam int count){
+        return filmService.printTop(count);
+
     }
+
 }

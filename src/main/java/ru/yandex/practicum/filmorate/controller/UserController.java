@@ -19,19 +19,18 @@ import java.util.List;
 public class UserController {
     private int idGenerate = 0;
     private final UserService userService;
-    private final InMemoryUserStorage storage;
 
     @Autowired
-    public UserController(UserService userService,InMemoryUserStorage storage){
+    public UserController(UserService userService){
         this.userService= userService;
-        this.storage = storage;
+
     }
 
 
     @GetMapping()
     public List<User> getAllUsers() {
 
-        return new ArrayList<User>(storage.allUsers.values());
+        return new ArrayList<User>(userService.getAllUsers());
     }
 
 
@@ -41,7 +40,7 @@ public class UserController {
         validate(user);
         user = checkName(user);
         user.setId(++idGenerate);
-        storage.createUser(user);
+        userService.addUser(user);
         log.info("Добавление пользователя");
        return user;
     }
@@ -50,32 +49,32 @@ public class UserController {
     public User updateUser(@RequestBody @Valid User updateUser) {
         validate(updateUser);
         updateUser = checkName(updateUser);
-        storage.updateUser(updateUser);
+        userService.updateUser(updateUser);
         log.info("Изменение пользователя");
         return updateUser;
 
     }
 
-    @PutMapping
-    public void addFriend(){
-//    }users/{id}/friends/{friendId}
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id, int friendId){
+        userService.addFriend(id,friendId);
     }
 
-    @DeleteMapping
-    public void deleteFriend() {
-//        /users/{id}/friends/{friendId}
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id, int friendId) {
+        userService.deleteFriend(id,friendId);
     }
 
-    @GetMapping
-    public List<Long> printFriends() {
-//            }users/{id}/friends
-        return new ArrayList<>();
+    @GetMapping("/{id}/friends")
+    public List<User> printFriends(@PathVariable int id) {
+
+        return userService.printFriends(id);
     }
 
-    @GetMapping
-    public List<Long> printCommonfriends() {
-//        users / {id} / friends / common / {otherId}
-        return new ArrayList<>();
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> printCommonFriends(@PathVariable int id, int otherId) {
+
+        return userService.printCommonFriends(id,otherId);
     }
     private void validate(User user) {
         if (user.getLogin().contains(" ")) {
