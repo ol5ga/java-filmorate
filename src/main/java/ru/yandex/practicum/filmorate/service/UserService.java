@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -49,8 +50,12 @@ public class UserService {
     public void deleteFriend(int id, int friendId) {
         User user1 = storage.getUser(id);
         User user2 = storage.getUser(friendId);
-        user1.friends.remove(id);
-        user2.friends.remove(friendId);
+        if(user1.friends.contains(friendId) && user2.friends.contains(id)) {
+            user1.friends.remove(id);
+            user2.friends.remove(friendId);
+        } else {
+            throw new ChangeException("Неверные пользователи");
+        }
     }
 
     public List<User> printFriends(int id) {

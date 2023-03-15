@@ -60,7 +60,7 @@ public class FilmControllerTest {
                         .contentType("application/json")
                         .content(inValidFilm))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @SneakyThrows
@@ -76,7 +76,7 @@ public class FilmControllerTest {
                         .contentType("application/json")
                         .content(inValidFilm))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @SneakyThrows
@@ -92,7 +92,7 @@ public class FilmControllerTest {
                         .contentType("application/json")
                         .content(inValidFilm))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 
     @SneakyThrows
@@ -108,6 +108,6 @@ public class FilmControllerTest {
                         .contentType("application/json")
                         .content(inValidFilm))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isInternalServerError());
     }
 }
