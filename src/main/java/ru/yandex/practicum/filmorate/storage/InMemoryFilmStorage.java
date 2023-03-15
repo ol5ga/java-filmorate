@@ -4,11 +4,12 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     public Map<Integer, Film> allFilms = new HashMap<>();
 
 
@@ -18,11 +19,17 @@ public class InMemoryFilmStorage implements FilmStorage{
         return film;
 
     }
+
     @Override
     public void deleteFilm(Film film) {
-        allFilms.remove(film.getId());
+        if (allFilms.containsKey(film.getId())) {
+            allFilms.remove(film.getId());
+        } else {
+            throw new ChangeException("Такого фильма нет в базе");
 
+        }
     }
+
     @Override
     public Film updateFilm(Film updateFilm) {
         if (allFilms.containsKey(updateFilm.getId())) {
@@ -34,7 +41,18 @@ public class InMemoryFilmStorage implements FilmStorage{
         return updateFilm;
     }
 
+    @Override
+    public ArrayList<Film> getAllFilms() {
+        return new ArrayList<>(allFilms.values());
+    }
 
+    @Override
+    public Film getFilm(int id) {
+        if (!allFilms.containsKey(id)) {
+            throw new ChangeException("Такого фильма нет в базе");
+        }
+        return allFilms.get(id);
+    }
 
 
 }

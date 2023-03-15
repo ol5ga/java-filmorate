@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,8 +19,8 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
-        this.userService= userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
 
     }
 
@@ -30,7 +28,7 @@ public class UserController {
     @GetMapping()
     public List<User> getAllUsers() {
 
-        return new ArrayList<User>(userService.getAllUsers());
+        return userService.getAllUsers();
     }
 
 
@@ -42,7 +40,7 @@ public class UserController {
         user.setId(++idGenerate);
         userService.addUser(user);
         log.info("Добавление пользователя");
-       return user;
+        return user;
     }
 
     @PutMapping
@@ -55,14 +53,20 @@ public class UserController {
 
     }
 
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable int id) {
+
+        return userService.getUser(id);
+    }
+
     @PutMapping("/{id}/friends/{friendId}")
-    public void addFriend(@PathVariable int id, int friendId){
-        userService.addFriend(id,friendId);
+    public void addFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable int id, int friendId) {
-        userService.deleteFriend(id,friendId);
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
@@ -72,15 +76,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> printCommonFriends(@PathVariable int id, int otherId) {
+    public List<User> printCommonFriends(@PathVariable int id, @PathVariable int otherId) {
 
-        return userService.printCommonFriends(id,otherId);
+        return userService.printCommonFriends(id, otherId);
     }
+
     private void validate(User user) {
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Неверный login");
         }
-
     }
 
     private User checkName(User user) {
@@ -89,7 +93,6 @@ public class UserController {
         }
         return user;
     }
-
 
 
 }
