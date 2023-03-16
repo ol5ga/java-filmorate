@@ -52,31 +52,17 @@ public class UserService {
 
     public List<User> printFriends(int id) {
         User user = storage.getUser(id);
-        List<Integer> friendsId = new ArrayList<>(user.friends.stream().collect(Collectors.toList()));
-        return friendsId.stream()
-                .map(s -> {
-                    User friend = storage.getUser(s);
-                    return friend;
-                })
+        return user.getFriends().stream()
+                .map(storage::getUser)
                 .collect(Collectors.toList());
     }
 
     public List<User> printCommonFriends(int id, int otherId) {
-        List<Integer> commonFriends = new ArrayList<>();
         User user1 = storage.getUser(id);
         User user2 = storage.getUser(otherId);
-        Set<Integer> friends1 = user1.getFriends();
-        Set<Integer> friends2 = user2.getFriends();
-        for (Integer userId : friends1) {
-            if (friends2.contains(userId)) {
-                commonFriends.add(userId);
-            }
-        }
-        return commonFriends.stream()
-                .map(s -> {
-                    User friend = storage.getUser(s);
-                    return friend;
-                })
+        return user1.getFriends().stream()
+                .filter(user2.getFriends()::contains)
+                .map(storage::getUser)
                 .collect(Collectors.toList());
     }
 }
