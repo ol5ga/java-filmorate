@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -8,32 +8,26 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.compare;
 
 
 @Service
+@RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage storage;
 
-    @Autowired
-    public FilmService(FilmStorage storage) {
-        this.storage = storage;
-    }
-
     public List<Film> getAllFilms() {
-
         return storage.getAllFilms();
     }
 
     public void createFilm(Film film) {
-
         storage.createFilm(film);
     }
 
     public void updateFilm(Film updateFilm) {
-
         storage.updateFilm(updateFilm);
     }
 
@@ -43,16 +37,20 @@ public class FilmService {
 
     public void addLike(int id, int userId) {
         Film film = storage.getFilm(id);
-        film.likes.add(userId);
+        Set<Integer> like = film.getLikes();
+        like.add(userId);
+        film.setLikes(like);
     }
 
     public void deleteLike(int id, int userId) {
         Film film = storage.getFilm(id);
-        if (film.getLikes().contains(userId)) {
-            film.likes.remove(userId);
+        Set<Integer> like = film.getLikes();
+        if (like.contains(userId)) {
+            like.remove(userId);
         } else {
             throw new ChangeException("Такого пользователя не существует");
         }
+        film.setLikes(like);
     }
 
 
@@ -63,7 +61,7 @@ public class FilmService {
         }
         return films.stream()
                 .sorted((p0, p1) -> {
-                    int comp = compare(p0.likes.size(), p1.likes.size());
+                    int comp = compare(p0.getLikes().size(), p1.getLikes().size());
                     return -1 * comp;
                 }).limit(count)
                 .collect(Collectors.toList());

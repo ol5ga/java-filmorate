@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,27 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
     private int idGenerate = 0;
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-
-    }
-
-
     @GetMapping()
     public List<User> getAllUsers() {
-
         return userService.getAllUsers();
     }
 
-
     @PostMapping
     public User create(@RequestBody @Valid User user) {
-
         validate(user);
         user = checkName(user);
         user.setId(++idGenerate);
@@ -50,18 +42,15 @@ public class UserController {
         userService.updateUser(updateUser);
         log.info("Изменение пользователя");
         return updateUser;
-
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable int id) {
-
         return userService.getUser(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable int id, @PathVariable int friendId) {
-
         userService.addFriend(id, friendId);
     }
 
@@ -72,13 +61,11 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     public List<User> printFriends(@PathVariable int id) {
-
         return userService.printFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> printCommonFriends(@PathVariable int id, @PathVariable int otherId) {
-
         return userService.printCommonFriends(id, otherId);
     }
 
