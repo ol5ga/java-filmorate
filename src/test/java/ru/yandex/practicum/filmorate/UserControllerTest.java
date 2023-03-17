@@ -61,12 +61,12 @@ public class UserControllerTest {
                         .contentType("application/json")
                         .content(inValidUser))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(inValidUser2))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
     }
 
@@ -86,12 +86,12 @@ public class UserControllerTest {
                         .contentType("application/json")
                         .content(inValidUser))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
         mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(inValidUser2))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
     }
 
@@ -125,7 +125,7 @@ public class UserControllerTest {
                         .contentType("application/json")
                         .content(inValidUser))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
     }
 }
