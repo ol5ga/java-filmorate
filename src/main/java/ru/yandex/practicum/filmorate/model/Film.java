@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validate.Release;
 
@@ -10,6 +11,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -27,5 +30,7 @@ public class Film {
     @Positive
     private final int duration;
     private Set<Integer> likes = new HashSet<>();
+    private final List<String> genre = new ArrayList<>();
+    private final MPA age;
 }
 

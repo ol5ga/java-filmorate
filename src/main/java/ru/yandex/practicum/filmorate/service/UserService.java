@@ -35,8 +35,13 @@ public class UserService {
     public void addFriend(int id, int friendId) {
         User user1 = storage.getUser(id);
         User user2 = storage.getUser(friendId);
-        user1.friends.add(friendId);
-        user2.friends.add(id);
+        if (user2.getApplications().contains(id)) {
+            user1.friends.add(friendId);
+            user2.friends.add(id);
+            user2.applications.remove(id);
+        } else {
+            user1.applications.add(friendId);
+        }
     }
 
     public void deleteFriend(int id, int friendId) {
