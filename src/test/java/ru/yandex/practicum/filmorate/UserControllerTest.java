@@ -67,6 +67,7 @@ public class UserControllerTest {
                         .content(inValidUser2))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+
     }
 
     @SneakyThrows
