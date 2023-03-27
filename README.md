@@ -9,7 +9,7 @@
 Кроме того, приложение хранит информацию о пользователях.
 
 #### Вся информация хранится в базе данных со следующей структурой:
-![Database structure](https://github.com/ol5ga/java-filmorate/blob/add-friends-likes/%D1%81%D1%85%D0%B5%D0%BC%D0%B0.png)
+![Database structure](https://github.com/ol5ga/java-filmorate/blob/add-friends-likes/Database%20structure.png)
 
 #### Диаграмма сожержит следующие таблицы:
 
