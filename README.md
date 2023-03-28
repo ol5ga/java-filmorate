@@ -11,7 +11,7 @@
 #### Вся информация хранится в базе данных со следующей структурой:
 ![Database structure](https://github.com/ol5ga/java-filmorate/blob/add-friends-likes/Database%20structure.png)
 
-#### Диаграмма сожержит следующие таблицы:
+### Диаграмма сожержит следующие таблицы:
 
 **films**  
 Содержит информацию о фильмах.  
@@ -49,3 +49,28 @@ _birthday_ - дата рождения;
 _user_id_ — идентификатор пользователя;  
 _friend_id_ — идентификатор друга пользователя;  
 _status_ - статус дружбы: подтвержденная, неподтвержденная;  
+
+### Примеры запросов  
+**Список подтвержденных друзей пользователя с id = 1**  
+SELECT friend_id  
+FROM friends  
+WHERE user_id = 1  
+AND status = 'confirmed';  
+  
+
+**10 фильмов с максимальным количеством лайков**  
+SELECT f.name  
+FROM films AS f  
+RIGHT OUTER JOIN likes AS l ON f.film_id = l.film_id  
+GROUP BY l.film_id  
+ORDER BY SUM(user_id) DESC  
+LIMIT 10;  
+
+  
+**Список комедий**  
+SELECT name  
+FROM films  
+WHERE film_id IN (SELECT fg.film_id  
+FROM film_genre AS fg  
+RIGHT OUTER JOIN genre AS g ON fg.genre_id = g.genre_id  
+WHERE g.genre = 'COMEDY');  
