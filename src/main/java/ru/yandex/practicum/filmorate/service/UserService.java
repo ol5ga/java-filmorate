@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +45,7 @@ public class UserService {
     public void deleteFriend(int id, int friendId) {
         User user1 = storage.getUser(id);
         User user2 = storage.getUser(friendId);
-        if(user1.friends.contains(friendId) && user2.friends.contains(id)) {
+        if (user1.friends.contains(friendId) && user2.friends.contains(id)) {
             user1.friends.remove(id);
             user2.friends.remove(friendId);
         } else {
