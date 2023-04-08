@@ -1,14 +1,20 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
-@Qualifier
+//@Qualifier
+@Primary
+@Component
 public class FilmDbStorage implements FilmStorage{
-
-    public FilmDbStorage() {
+    private final JdbcTemplate jdbcTemplate;
+    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         super();
+        this.jdbcTemplate=jdbcTemplate;
     }
 
     @Override
