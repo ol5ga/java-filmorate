@@ -20,15 +20,6 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUser(User user) {
-        if (allUsers.containsKey(user.getId())) {
-            allUsers.remove(user.getId());
-        } else {
-            throw new ChangeException("Такого пользователя не существует");
-        }
-    }
-
-    @Override
     public User updateUser(User updateUser) {
         if (allUsers.containsKey(updateUser.getId())) {
             allUsers.put(updateUser.getId(), updateUser);

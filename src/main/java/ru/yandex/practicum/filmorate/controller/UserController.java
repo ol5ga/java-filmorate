@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
-    private int idGenerate = 0;
+//    private int idGenerate = 0;
     private final UserService userService;
 
     @GetMapping()
@@ -29,7 +29,6 @@ public class UserController {
     public User create(@RequestBody @Valid User user) {
         validate(user);
         user = checkName(user);
-        user.setId(++idGenerate);
         userService.addUser(user);
         log.info("Добавление пользователя");
         return user;

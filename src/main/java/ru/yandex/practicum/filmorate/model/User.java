@@ -28,4 +28,5 @@ public class User {
     public Set<Integer> friends = new HashSet<>();
     public Set<Integer> applications = new HashSet<>();
 
+
 }
