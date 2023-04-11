@@ -31,6 +31,14 @@ public class Film {
     private final int duration;
     private Set<Integer> likes = new HashSet<>();
     private final List<String> genre = new ArrayList<>();
-    private final MPA age;
+    private MPA age;
+
+
+    public Film(String name, String description, LocalDate releaseDate, int duration) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
 }
 
