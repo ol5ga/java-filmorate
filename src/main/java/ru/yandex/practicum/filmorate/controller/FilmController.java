@@ -15,7 +15,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmController {
-//    private int idGenerate = 0;
     private final FilmService filmService;
 
 
@@ -26,7 +25,6 @@ public class FilmController {
 
     @PostMapping
     public Film create(@RequestBody @Valid Film film) {
-//        film.setId(++idGenerate);
         filmService.createFilm(film);
         log.info("Добавление фильма");
         return film;

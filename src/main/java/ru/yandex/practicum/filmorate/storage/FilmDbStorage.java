@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,11 +9,11 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 //@Qualifier
@@ -44,26 +43,28 @@ public class FilmDbStorage implements FilmStorage{
         }, keyHolder);
         int id = keyHolder.getKey().intValue();
         film.setId(id);
+//        String sql = "insert into mpa (MPA_id,MPA_name)" + "values(?,?)";
+//        jdbcTemplate.update(sqlQuery,film.getMpa().getId(),film.getMpa().getName());
         return film;
     }
 
     @Override
     public Film updateFilm(Film updateFilm) {
         String sqlQuery = "update public.films set name = ?, description =?, release_data = ?, duration = ?, MPA = ? where film_id =?";
-        jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa(), updateFilm.getId());
+        jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa().getId(), updateFilm.getId());
         return getFilm(updateFilm.getId());
     }
 
     @Override
     public List<Film> getAllFilms() {
-        String sqlQuery = "select * from public.films";
+        String sqlQuery = "select * from public.films f join MPA m ON f.MPA = m.MPA_id";
         List<Film> films = jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
         return films;
     }
 
     @Override
     public Film getFilm(int id) {
-        String sql = "select * from films where film_id = ? ";
+        String sql = "select * from films f join MPA m ON f.MPA = m.MPA_id where film_id = ?";
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql,id);
         if(userRows.next()) {
             log.info("Найден фильм: {} {}", userRows.getString("film_id"), userRows.getString("name"));
@@ -76,13 +77,24 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     private Film mapRowToFilm(ResultSet resultSet, int i) throws SQLException {
+        MPA mpa = rowMpa(resultSet, i);
         Film film = new Film(
                 resultSet.getString("name"),
                 resultSet.getString("description"),
                 resultSet.getDate("release_data").toLocalDate(),
-                resultSet.getInt("duration")
+                resultSet.getInt("duration"),
+                mpa
+
         );
         film.setId(resultSet.getInt("film_id"));
         return film;
+    }
+
+    private MPA rowMpa(ResultSet rs, int i) throws SQLException {
+
+        return MPA.builder()
+                .id(rs.getInt("MPA_id"))
+                .name(rs.getString("MPA_name"))
+                .build();
     }
 }
