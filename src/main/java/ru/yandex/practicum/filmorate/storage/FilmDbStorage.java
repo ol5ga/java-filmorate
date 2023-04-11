@@ -30,8 +30,8 @@ public class FilmDbStorage implements FilmStorage{
 
     @Override
     public Film createFilm(Film film) {
-        String sqlQuery = "insert into public.films (name, description, release_data, duration) " +
-                "values (?, ?, ?, ?)";
+        String sqlQuery = "insert into public.films (name, description, release_data, duration, MPA) " +
+                "values (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
@@ -39,6 +39,7 @@ public class FilmDbStorage implements FilmStorage{
             stmt.setString(2, film.getDescription());
             stmt.setObject(3, film.getReleaseDate());
             stmt.setInt(4, film.getDuration());
+            stmt.setInt(5, film.getMpa().getId());
             return stmt;
         }, keyHolder);
         int id = keyHolder.getKey().intValue();
@@ -49,7 +50,7 @@ public class FilmDbStorage implements FilmStorage{
     @Override
     public Film updateFilm(Film updateFilm) {
         String sqlQuery = "update public.films set name = ?, description =?, release_data = ?, duration = ?, MPA = ? where film_id =?";
-        jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getAge(), updateFilm.getId());
+        jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa(), updateFilm.getId());
         return getFilm(updateFilm.getId());
     }
 

@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.validate.Release;
 
 import javax.validation.constraints.NotBlank;
@@ -20,18 +22,19 @@ public class Film {
 
     private int id;
     @NotBlank
-    private final String name;
+    private String name;
     @Size(max = 200)
     @NotNull
-    private final String description;
+    private String description;
     @NotNull
     @Release
-    private final LocalDate releaseDate;
+    private LocalDate releaseDate;
     @Positive
-    private final int duration;
+    private int duration;
+    private Rating mpa;
     private Set<Integer> likes = new HashSet<>();
-    private final List<String> genre = new ArrayList<>();
-    private MPA age;
+    private List<String> genre = new ArrayList<>();
+
 
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {
@@ -39,6 +42,17 @@ public class Film {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, Rating mpa) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+    }
+
+    public Film() {
     }
 }
 
