@@ -9,12 +9,15 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 //@Qualifier
 @Primary
@@ -43,8 +46,11 @@ public class FilmDbStorage implements FilmStorage{
         }, keyHolder);
         int id = keyHolder.getKey().intValue();
         film.setId(id);
-//        String sql = "insert into mpa (MPA_id,MPA_name)" + "values(?,?)";
-//        jdbcTemplate.update(sqlQuery,film.getMpa().getId(),film.getMpa().getName());
+        String sql = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
+        for (Genre genre :film.getGenres() ) {
+            jdbcTemplate.update(sql,film.getId(),genre.getId());
+        }
+
         return film;
     }
 
@@ -52,6 +58,10 @@ public class FilmDbStorage implements FilmStorage{
     public Film updateFilm(Film updateFilm) {
         String sqlQuery = "update public.films set name = ?, description =?, release_data = ?, duration = ?, MPA = ? where film_id =?";
         jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa().getId(), updateFilm.getId());
+        String sql = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
+        for (Genre genre :updateFilm.getGenres() ) {
+            jdbcTemplate.update(sql,updateFilm.getId(),genre.getId());
+        }
         return getFilm(updateFilm.getId());
     }
 
@@ -78,13 +88,15 @@ public class FilmDbStorage implements FilmStorage{
 
     private Film mapRowToFilm(ResultSet resultSet, int i) throws SQLException {
         MPA mpa = rowMpa(resultSet, i);
+        String sql = "select * from film_genre fg join genre g ON fg.genre_id = g.genre_id where film_id = ? ";
+        List<Genre> genre = jdbcTemplate.query(sql, this::rowGenre, resultSet.getInt("film_id"));
         Film film = new Film(
                 resultSet.getString("name"),
                 resultSet.getString("description"),
                 resultSet.getDate("release_data").toLocalDate(),
                 resultSet.getInt("duration"),
-                mpa
-
+                mpa,
+                genre
         );
         film.setId(resultSet.getInt("film_id"));
         return film;
@@ -96,5 +108,14 @@ public class FilmDbStorage implements FilmStorage{
                 .id(rs.getInt("MPA_id"))
                 .name(rs.getString("MPA_name"))
                 .build();
+    }
+
+    private Genre rowGenre(ResultSet rs, int i) throws SQLException {
+//        Set<Genre> genres = new HashSet<>();
+        return Genre.builder()
+                .id(rs.getInt("genre_id"))
+                .name(rs.getString("name"))
+                .build();
+
     }
 }
