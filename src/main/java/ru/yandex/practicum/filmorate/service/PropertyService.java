@@ -15,6 +15,7 @@ public class PropertyService {
 
     private final PropertyStorage storage;
 
+
     public List<Genre> getAllGenres() {
         return storage.getAllGenres();
     }

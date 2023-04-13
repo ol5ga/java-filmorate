@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,13 +25,10 @@ import java.util.Set;
 @Primary
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage{
     private final JdbcTemplate jdbcTemplate;
-    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
-        super();
-        this.jdbcTemplate=jdbcTemplate;
-    }
-
+private PropertyDBStorage property;
     @Override
     public Film createFilm(Film film) {
         String sqlQuery = "insert into public.films (name, description, release_data, duration, MPA) " +
@@ -58,9 +57,13 @@ public class FilmDbStorage implements FilmStorage{
     public Film updateFilm(Film updateFilm) {
         String sqlQuery = "update public.films set name = ?, description =?, release_data = ?, duration = ?, MPA = ? where film_id =?";
         jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa().getId(), updateFilm.getId());
-        String sql = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
-        for (Genre genre :updateFilm.getGenres() ) {
-            jdbcTemplate.update(sql,updateFilm.getId(),genre.getId());
+        Set<Genre> genres = new HashSet<>();
+        genres.addAll(updateFilm.getGenres());
+        String sql = "delete from film_genre where film_id = ?";
+        jdbcTemplate.update(sql,updateFilm.getId());
+        String sqlPut = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
+        for (Genre genre :genres) {
+            jdbcTemplate.update(sqlPut,updateFilm.getId(),genre.getId());
         }
         return getFilm(updateFilm.getId());
     }
@@ -89,7 +92,7 @@ public class FilmDbStorage implements FilmStorage{
     private Film mapRowToFilm(ResultSet resultSet, int i) throws SQLException {
         MPA mpa = rowMpa(resultSet, i);
         String sql = "select * from film_genre fg join genre g ON fg.genre_id = g.genre_id where film_id = ? ";
-        List<Genre> genre = jdbcTemplate.query(sql, this::rowGenre, resultSet.getInt("film_id"));
+        List<Genre> genre = jdbcTemplate.query(sql, (rs, i1) -> rowGenre(rs, i1), resultSet.getInt("film_id"));
         Film film = new Film(
                 resultSet.getString("name"),
                 resultSet.getString("description"),
@@ -111,11 +114,12 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     private Genre rowGenre(ResultSet rs, int i) throws SQLException {
-//        Set<Genre> genres = new HashSet<>();
         return Genre.builder()
                 .id(rs.getInt("genre_id"))
                 .name(rs.getString("name"))
                 .build();
 
     }
+
+
 }

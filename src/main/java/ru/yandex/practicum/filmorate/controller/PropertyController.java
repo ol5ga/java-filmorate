@@ -20,24 +20,24 @@ public class PropertyController {
 
     private final PropertyService service;
 
-    @GetMapping("/genres")()
+    @GetMapping("/genres")
     public List<Genre> getAllGenres() {
         return new ArrayList<Genre>(service.getAllGenres());
     }
 
 
-    @GetMapping("/genres/{id}")()
+    @GetMapping("/genres/{id}")
     public Genre getGenre(@PathVariable int id) {
         return service.getGenre(id);
     }
 
-    @GetMapping("/mpa")()
+    @GetMapping("/mpa")
     public List<MPA> getAllMpa() {
         return new ArrayList<MPA>(service.getAllMpa());
     }
 
 
-    @GetMapping("/mpa/{id}")()
+    @GetMapping("/mpa/{id}")
     public MPA getMPA(@PathVariable int id) {
         return service.getMPA(id);
     }
