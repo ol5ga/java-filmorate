@@ -37,20 +37,20 @@ public class FilmService {
 
     public void addLike(int id, int userId) {
         Film film = storage.getFilm(id);
-        Set<Integer> like = film.getLikes();
+        Set<Integer> like = film.getRate();
         like.add(userId);
-        film.setLikes(like);
+        film.setRate(like);
     }
 
     public void deleteLike(int id, int userId) {
         Film film = storage.getFilm(id);
-        Set<Integer> like = film.getLikes();
+        Set<Integer> like = film.getRate();
         if (like.contains(userId)) {
             like.remove(userId);
         } else {
             throw new ChangeException("Такого пользователя не существует");
         }
-        film.setLikes(like);
+        film.setRate(like);
     }
 
 
@@ -61,7 +61,7 @@ public class FilmService {
         }
         return films.stream()
                 .sorted((p0, p1) -> {
-                    int comp = compare(p0.getLikes().size(), p1.getLikes().size());
+                    int comp = compare(p0.getRate().size(), p1.getRate().size());
                     return -1 * comp;
                 }).limit(count)
                 .collect(Collectors.toList());

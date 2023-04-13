@@ -11,8 +11,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Data
@@ -30,8 +28,8 @@ public class Film {
     @Positive
     private int duration;
     private MPA mpa;
-    private Set<Integer> likes = new HashSet<>();
-    private List<Genre> genres = new ArrayList<>();
+    private Set<Integer> rate = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
 
 
 
@@ -50,13 +48,24 @@ public class Film {
         this.mpa = mpa;
     }
 
-    public Film(String name, String description, LocalDate releaseDate, int duration, MPA mpa, List<Genre> genres) {
+    public Film(String name, String description, LocalDate releaseDate, int duration, MPA mpa, Set<Genre> genres) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
         this.mpa = mpa;
         this.genres = genres;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, Set<Integer> likes, MPA mpa, Set<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.rate = likes;
+        this.mpa = mpa;
+        this.genres = genres;
+
     }
 
     public Film() {
