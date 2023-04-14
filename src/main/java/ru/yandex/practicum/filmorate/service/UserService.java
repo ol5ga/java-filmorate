@@ -32,41 +32,18 @@ public class UserService {
     }
 
     public void addFriend(int id, int friendId) {
-        User user1 = storage.getUser(id);
-        User user2 = storage.getUser(friendId);
-        if (user2.getApplications().contains(id)) {
-            user1.friends.add(friendId);
-            user2.friends.add(id);
-            user2.applications.remove(id);
-        } else {
-            user1.applications.add(friendId);
-        }
+        storage.addFriend(id,friendId);
     }
 
     public void deleteFriend(int id, int friendId) {
-        User user1 = storage.getUser(id);
-        User user2 = storage.getUser(friendId);
-        if (user1.friends.contains(friendId) && user2.friends.contains(id)) {
-            user1.friends.remove(id);
-            user2.friends.remove(friendId);
-        } else {
-            throw new ChangeException("Неверные пользователи");
-        }
+        storage.deleteFriend(id,friendId);
     }
 
     public List<User> printFriends(int id) {
-        User user = storage.getUser(id);
-        return user.getFriends().stream()
-                .map(storage::getUser)
-                .collect(Collectors.toList());
+      return storage.printFriends(id);
     }
 
     public List<User> printCommonFriends(int id, int otherId) {
-        User user1 = storage.getUser(id);
-        User user2 = storage.getUser(otherId);
-        return user1.getFriends().stream()
-                .filter(user2.getFriends()::contains)
-                .map(storage::getUser)
-                .collect(Collectors.toList());
+       return storage.printCommonFriends(id,otherId);
     }
 }

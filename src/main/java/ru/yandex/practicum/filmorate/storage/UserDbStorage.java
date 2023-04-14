@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Primary
 @Component
@@ -90,6 +91,48 @@ public class UserDbStorage implements UserStorage{
             throw new ChangeException("Такого пользователя не существует");
 
     }
+    }
+
+    public void addFriend(int id, int friendId) {
+//        String sqlUser1 = "select friend_id, status from friends where user_id = ?";
+//        List<Integer> user1 = jdbcTemplate.queryForList(sqlUser1,Integer.class,id);
+//        String sqlUser2 = "select friend_id from friends where user_id = ?";
+//        List<Integer> user2 = jdbcTemplate.queryForList(sqlUser2,Integer.class,friendId);
+//        if (user2.contains(id)) {
+//            user1.friends.add(friendId);
+//            user2.friends.add(id);
+//            user2.applications.remove(id);
+//        } else {
+           String sql = "insert into friends (user_id, friend_id, status) values (?,?,?)";
+            jdbcTemplate.update(sql,id,friendId,"applications");
+        }
+    }
+    @Override
+    public void deleteFriend(int id, int friendId) {
+        User user1 = getUser(id);
+        User user2 = getUser(friendId);
+        if (user1.friends.contains(friendId) && user2.friends.contains(id)) {
+            user1.friends.remove(id);
+            user2.friends.remove(friendId);
+        } else {
+            throw new ChangeException("Неверные пользователи");
+        }
+    }
+    @Override
+    public List<User> printFriends(int id) {
+        User user = getUser(id);
+        return user.getFriends().stream()
+                .map(storage::getUser)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<User> printCommonFriends(int id, int otherId) {
+        User user1 = storage.getUser(id);
+        User user2 = storage.getUser(otherId);
+        return user1.getFriends().stream()
+                .filter(user2.getFriends()::contains)
+                .map(storage::getUser)
+                .collect(Collectors.toList());
     }
 
 }
