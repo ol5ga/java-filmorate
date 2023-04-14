@@ -50,11 +50,6 @@ private PropertyDBStorage property;
         for (Genre genre :film.getGenres() ) {
             jdbcTemplate.update(sql,film.getId(),genre.getId());
         }
-        for (Integer user: film.getRate()){
-            String sqlPutLikes = "insert into likes (film_id, user_id)" + "values(?,?)";
-            jdbcTemplate.update(sqlPutLikes,film.getId(),user);
-        }
-
         return film;
     }
 
@@ -64,17 +59,10 @@ private PropertyDBStorage property;
         jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa().getId(), updateFilm.getId());
         String sqlDelGenre = "delete from film_genre where film_id = ?";
         jdbcTemplate.update(sqlDelGenre,updateFilm.getId());
-        String sqlDelLikes = "delete from likes where film_id = ?";
-        jdbcTemplate.update(sqlDelLikes,updateFilm.getId());
         for (Genre genre :updateFilm.getGenres()) {
             String sqlPutGenre = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
             jdbcTemplate.update(sqlPutGenre,updateFilm.getId(),genre.getId());
         }
-        for (Integer user: updateFilm.getRate()){
-            String sqlPutLikes = "insert into likes (film_id, user_id)" + "values(?,?)";
-            jdbcTemplate.update(sqlPutLikes,updateFilm.getId(),user);
-        }
-
         return getFilm(updateFilm.getId());
     }
 
@@ -104,9 +92,9 @@ private PropertyDBStorage property;
         String sql = "select * from film_genre fg join genre g ON fg.genre_id = g.genre_id where film_id = ? ";
         List<Genre> genreList = jdbcTemplate.query(sql, (rs, i1) -> rowGenre(rs, i1), resultSet.getInt("film_id"));
         Set<Genre> genres = new HashSet<>(genreList);
-        String sqlLikes = "select user_id from likes where film_id = ?";
+        String sqlLikes = "select count(user_id) from likes where film_id = ?";
         List<Integer> likesList = jdbcTemplate.queryForList(sqlLikes,Integer.class,resultSet.getInt("film_id"));
-        Set<Integer> likes = new HashSet<>(likesList);
+        int likes = likesList.get(0);
         Film film = new Film(
                 resultSet.getString("name"),
                 resultSet.getString("description"),

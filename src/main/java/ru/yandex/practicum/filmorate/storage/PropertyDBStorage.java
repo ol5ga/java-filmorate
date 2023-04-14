@@ -13,13 +13,20 @@ import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.lang.Integer.compare;
+
 @Primary
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class PropertyDBStorage implements PropertyStorage{
     private final JdbcTemplate jdbcTemplate;
+    private final FilmStorage filmStorage;
 
     @Override
     public List<Genre> getAllGenres() {
@@ -63,6 +70,36 @@ public class PropertyDBStorage implements PropertyStorage{
         }
     }
 
+    public void addLike(int id, int userId){
+        String sqlAddLike = "insert into likes (film_id,user_id)" + "values(?,?)";
+        jdbcTemplate.update(sqlAddLike,id,userId);
+    }
+
+    public void deleteLike(int id, int userId) {
+        String sql = "SELECT user_id = ? FROM likes";
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql,userId);
+        if(userRows.next()) {
+            log.info("Лайк пользователя {} фильму {} удален", userId,id);
+            jdbcTemplate.update("delete from likes where film_id = ?", id);
+        } else {
+            log.info("Пользователь с идентификатором {} не найден.", userId);
+            throw new ChangeException("Такого пользователя не существует");
+        }
+    }
+
+    public List<Film> printTop(int count) {
+        List<Film> films = filmStorage.getAllFilms();
+        if (count > films.size()) {
+            count = films.size();
+        }
+        return films.stream()
+                .sorted((p0, p1) -> {
+                    int comp = compare(p0.getRate(), p1.getRate());
+                    return -1 * comp;
+                }).limit(count)
+                .collect(Collectors.toList());
+
+    }
     public Genre rowGenre(ResultSet rs, int i) throws SQLException {
         return Genre.builder()
                 .id(rs.getInt("genre_id"))

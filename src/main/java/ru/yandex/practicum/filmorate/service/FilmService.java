@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.PropertyDBStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import static java.lang.Integer.compare;
 @RequiredArgsConstructor
 public class FilmService {
        private final FilmStorage storage;
+       private final PropertyDBStorage property;
 
     public List<Film> getAllFilms() {
         return storage.getAllFilms();
@@ -36,36 +38,16 @@ public class FilmService {
     }
 
     public void addLike(int id, int userId) {
-        Film film = storage.getFilm(id);
-        Set<Integer> like = film.getRate();
-        like.add(userId);
-        film.setRate(like);
+        property.addLike(id,userId);
     }
 
     public void deleteLike(int id, int userId) {
-        Film film = storage.getFilm(id);
-        Set<Integer> like = film.getRate();
-        if (like.contains(userId)) {
-            like.remove(userId);
-        } else {
-            throw new ChangeException("Такого пользователя не существует");
-        }
-        film.setRate(like);
+        property.deleteLike(id,userId);
     }
 
 
     public List<Film> printTop(int count) {
-        List<Film> films = new ArrayList<>(storage.getAllFilms());
-        if (count > films.size()) {
-            count = films.size();
-        }
-        return films.stream()
-                .sorted((p0, p1) -> {
-                    int comp = compare(p0.getRate().size(), p1.getRate().size());
-                    return -1 * comp;
-                }).limit(count)
-                .collect(Collectors.toList());
-
+        return property.printTop(count);
     }
 
 }
