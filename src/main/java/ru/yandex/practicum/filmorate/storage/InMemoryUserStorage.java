@@ -43,6 +43,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         return allUsers.get(id);
     }
+
     @Override
     public void addFriend(int id, int friendId) {
         User user1 = getUser(id);
@@ -55,6 +56,7 @@ public class InMemoryUserStorage implements UserStorage {
             user1.applications.add(friendId);
         }
     }
+
     @Override
     public void deleteFriend(int id, int friendId) {
         User user1 = getUser(id);
@@ -66,6 +68,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ChangeException("Неверные пользователи");
         }
     }
+
     @Override
     public List<User> printFriends(int id) {
         User user = getUser(id);
@@ -73,6 +76,7 @@ public class InMemoryUserStorage implements UserStorage {
                 .map(this::getUser)
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<User> printCommonFriends(int id, int otherId) {
         User user1 = getUser(id);

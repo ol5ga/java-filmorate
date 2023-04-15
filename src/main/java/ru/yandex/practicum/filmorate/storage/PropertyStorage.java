@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface PropertyStorage {
 
-    public List<Genre> getAllGenres();
+    List<Genre> getAllGenres();
 
 
-    public Genre getGenre(int id);
+    Genre getGenre(int id);
 
 
-    public List<MPA> getAllMpa();
+    List<MPA> getAllMpa();
 
 
-    public MPA getMpa(int id);
+    MPA getMpa(int id);
 
 }

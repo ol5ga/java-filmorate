@@ -28,9 +28,8 @@ public class Film {
     @Positive
     private int duration;
     private MPA mpa;
-    private Integer rate ;
+    private Integer rate;
     private Set<Genre> genres = new HashSet<>();
-
 
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {

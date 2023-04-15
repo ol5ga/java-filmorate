@@ -1,14 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,18 +29,18 @@ public class UserService {
     }
 
     public void addFriend(int id, int friendId) {
-        storage.addFriend(id,friendId);
+        storage.addFriend(id, friendId);
     }
 
     public void deleteFriend(int id, int friendId) {
-        storage.deleteFriend(id,friendId);
+        storage.deleteFriend(id, friendId);
     }
 
     public List<User> printFriends(int id) {
-      return storage.printFriends(id);
+        return storage.printFriends(id);
     }
 
     public List<User> printCommonFriends(int id, int otherId) {
-       return storage.printCommonFriends(id,otherId);
+        return storage.printCommonFriends(id, otherId);
     }
 }

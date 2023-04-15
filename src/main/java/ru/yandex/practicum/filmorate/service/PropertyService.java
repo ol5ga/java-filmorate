@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.PropertyStorage;
@@ -20,11 +19,11 @@ public class PropertyService {
         return storage.getAllGenres();
     }
 
-    public Genre getGenre(int id){
+    public Genre getGenre(int id) {
         return storage.getGenre(id);
     }
 
-    public List<MPA> getAllMpa(){
+    public List<MPA> getAllMpa() {
         return storage.getAllMpa();
     }
 

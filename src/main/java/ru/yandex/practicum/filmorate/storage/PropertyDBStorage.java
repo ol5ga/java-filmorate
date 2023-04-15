@@ -13,9 +13,7 @@ import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.compare;
@@ -24,15 +22,14 @@ import static java.lang.Integer.compare;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class PropertyDBStorage implements PropertyStorage{
+public class PropertyDBStorage implements PropertyStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmStorage filmStorage;
 
     @Override
     public List<Genre> getAllGenres() {
         String sqlQuery = "select * from genre";
-        List<Genre> genres = jdbcTemplate.query(sqlQuery, this::rowGenre);
-        return genres;
+        return jdbcTemplate.query(sqlQuery, this::rowGenre);
     }
 
     @Override
@@ -52,8 +49,7 @@ public class PropertyDBStorage implements PropertyStorage{
     @Override
     public List<MPA> getAllMpa() {
         String sqlQuery = "select * from MPA";
-        List<MPA> Mpas = jdbcTemplate.query(sqlQuery, this::rowMpa);
-        return Mpas;
+        return jdbcTemplate.query(sqlQuery, this::rowMpa);
     }
 
     @Override
@@ -62,7 +58,7 @@ public class PropertyDBStorage implements PropertyStorage{
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, id);
         if (userRows.next()) {
             log.info("Найден рейтинг с идентификатором: {}", userRows.getString("MPA_id"));
-        return jdbcTemplate.queryForObject(sql, this::rowMpa, id);
+            return jdbcTemplate.queryForObject(sql, this::rowMpa, id);
         } else {
             log.info("Жанр с рейтингом {} не найден.", id);
             throw new ChangeException("Такого рейтинга не существует");
@@ -70,16 +66,16 @@ public class PropertyDBStorage implements PropertyStorage{
         }
     }
 
-    public void addLike(int id, int userId){
+    public void addLike(int id, int userId) {
         String sqlAddLike = "insert into likes (film_id,user_id)" + "values(?,?)";
-        jdbcTemplate.update(sqlAddLike,id,userId);
+        jdbcTemplate.update(sqlAddLike, id, userId);
     }
 
     public void deleteLike(int id, int userId) {
         String sql = "SELECT user_id = ? FROM likes";
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql,userId);
-        if(userRows.next()) {
-            log.info("Лайк пользователя {} фильму {} удален", userId,id);
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, userId);
+        if (userRows.next()) {
+            log.info("Лайк пользователя {} фильму {} удален", userId, id);
             jdbcTemplate.update("delete from likes where film_id = ?", id);
         } else {
             log.info("Пользователь с идентификатором {} не найден.", userId);
@@ -100,6 +96,7 @@ public class PropertyDBStorage implements PropertyStorage{
                 .collect(Collectors.toList());
 
     }
+
     public Genre rowGenre(ResultSet rs, int i) throws SQLException {
         return Genre.builder()
                 .id(rs.getInt("genre_id"))

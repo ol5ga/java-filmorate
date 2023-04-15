@@ -2,24 +2,18 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.PropertyDBStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.lang.Integer.compare;
 
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
-       private final FilmStorage storage;
-       private final PropertyDBStorage property;
+    private final FilmStorage storage;
+    private final PropertyDBStorage property;
 
     public List<Film> getAllFilms() {
         return storage.getAllFilms();
@@ -38,11 +32,11 @@ public class FilmService {
     }
 
     public void addLike(int id, int userId) {
-        property.addLike(id,userId);
+        property.addLike(id, userId);
     }
 
     public void deleteLike(int id, int userId) {
-        property.deleteLike(id,userId);
+        property.deleteLike(id, userId);
     }
 
 

@@ -13,11 +13,11 @@ public interface UserStorage {
 
     User getUser(int id);
 
-    public void addFriend(int id, int friendId);
+    void addFriend(int id, int friendId);
 
-    public void deleteFriend(int id, int friendId);
+    void deleteFriend(int id, int friendId);
 
-    public List<User> printFriends(int id);
+    List<User> printFriends(int id);
 
-    public List<User> printCommonFriends(int id, int otherId);
+    List<User> printCommonFriends(int id, int otherId);
 }

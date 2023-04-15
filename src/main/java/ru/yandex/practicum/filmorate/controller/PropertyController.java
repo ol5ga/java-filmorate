@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.service.PropertyService;
@@ -33,9 +32,8 @@ public class PropertyController {
 
     @GetMapping("/mpa")
     public List<MPA> getAllMpa() {
-        return new ArrayList<MPA>(service.getAllMpa());
+        return service.getAllMpa();
     }
-
 
     @GetMapping("/mpa/{id}")
     public MPA getMPA(@PathVariable int id) {

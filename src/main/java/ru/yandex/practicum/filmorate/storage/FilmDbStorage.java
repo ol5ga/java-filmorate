@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -17,19 +16,18 @@ import ru.yandex.practicum.filmorate.model.MPA;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//@Qualifier
+
 @Primary
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class FilmDbStorage implements FilmStorage{
+public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
-private PropertyDBStorage property;
+
     @Override
     public Film createFilm(Film film) {
         String sqlQuery = "insert into public.films (name, description, release_data, duration, MPA) " +
@@ -47,8 +45,8 @@ private PropertyDBStorage property;
         int id = keyHolder.getKey().intValue();
         film.setId(id);
         String sql = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
-        for (Genre genre :film.getGenres() ) {
-            jdbcTemplate.update(sql,film.getId(),genre.getId());
+        for (Genre genre : film.getGenres()) {
+            jdbcTemplate.update(sql, film.getId(), genre.getId());
         }
         return film;
     }
@@ -56,12 +54,12 @@ private PropertyDBStorage property;
     @Override
     public Film updateFilm(Film updateFilm) {
         String sqlQuery = "update public.films set name = ?, description =?, release_data = ?, duration = ?, MPA = ? where film_id =?";
-        jdbcTemplate.update(sqlQuery, updateFilm.getName(),updateFilm.getDescription(),updateFilm.getReleaseDate(),updateFilm.getDuration(),updateFilm.getMpa().getId(), updateFilm.getId());
+        jdbcTemplate.update(sqlQuery, updateFilm.getName(), updateFilm.getDescription(), updateFilm.getReleaseDate(), updateFilm.getDuration(), updateFilm.getMpa().getId(), updateFilm.getId());
         String sqlDelGenre = "delete from film_genre where film_id = ?";
-        jdbcTemplate.update(sqlDelGenre,updateFilm.getId());
-        for (Genre genre :updateFilm.getGenres()) {
+        jdbcTemplate.update(sqlDelGenre, updateFilm.getId());
+        for (Genre genre : updateFilm.getGenres()) {
             String sqlPutGenre = "insert into film_genre (film_id,genre_id)" + "values(?,?)";
-            jdbcTemplate.update(sqlPutGenre,updateFilm.getId(),genre.getId());
+            jdbcTemplate.update(sqlPutGenre, updateFilm.getId(), genre.getId());
         }
         return getFilm(updateFilm.getId());
     }
@@ -69,17 +67,16 @@ private PropertyDBStorage property;
     @Override
     public List<Film> getAllFilms() {
         String sqlQuery = "select * from public.films f join MPA m ON f.MPA = m.MPA_id";
-        List<Film> films = jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
-        return films;
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
 
     @Override
     public Film getFilm(int id) {
         String sql = "select * from films f join MPA m ON f.MPA = m.MPA_id where film_id = ?";
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql,id);
-        if(userRows.next()) {
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, id);
+        if (userRows.next()) {
             log.info("Найден фильм: {} {}", userRows.getString("film_id"), userRows.getString("name"));
-            return    jdbcTemplate.queryForObject(sql, this::mapRowToFilm, id);
+            return jdbcTemplate.queryForObject(sql, this::mapRowToFilm, id);
         } else {
             log.info("Фильм с идентификатором {} не найден.", id);
             throw new ChangeException("Такого фильма не существует");
@@ -93,7 +90,7 @@ private PropertyDBStorage property;
         List<Genre> genreList = jdbcTemplate.query(sql, (rs, i1) -> rowGenre(rs, i1), resultSet.getInt("film_id"));
         Set<Genre> genres = new HashSet<>(genreList);
         String sqlLikes = "select count(user_id) from likes where film_id = ?";
-        List<Integer> likesList = jdbcTemplate.queryForList(sqlLikes,Integer.class,resultSet.getInt("film_id"));
+        List<Integer> likesList = jdbcTemplate.queryForList(sqlLikes, Integer.class, resultSet.getInt("film_id"));
         int likes = likesList.get(0);
         Film film = new Film(
                 resultSet.getString("name"),
@@ -102,7 +99,7 @@ private PropertyDBStorage property;
                 resultSet.getInt("duration"),
                 likes,
                 mpa,
-               genres
+                genres
 
         );
         film.setId(resultSet.getInt("film_id"));
