@@ -45,6 +45,6 @@ CREATE TABLE IF NOT EXISTS likes(
 CREATE TABLE IF NOT EXISTS friends(
 	user_id INTEGER REFERENCES users (user_id),
 	friend_id INTEGER REFERENCES users (user_id),
-	status varchar(10),
+	status varchar(12),
 	PRIMARY KEY (USER_ID,FRIEND_ID)
 );

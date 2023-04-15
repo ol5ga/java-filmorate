@@ -79,7 +79,7 @@ public class InMemoryUserStorage implements UserStorage {
         User user2 = getUser(otherId);
         return user1.getFriends().stream()
                 .filter(user2.getFriends()::contains)
-                .map(this::getUser)
+                .map(id1 -> getUser(id1))
                 .collect(Collectors.toList());
     }
 }
