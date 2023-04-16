@@ -24,13 +24,13 @@ class UserDbStorageTest {
     private final UserDbStorage userStorage;
 
     @BeforeEach
-    void fullDB(){
+    void fullDB() {
         User user = new User("mail@mail.ru", "Nick Name", "User1", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
     }
 
     @Test
-    void createUser(){
+    void createUser() {
         User user = new User("mail@mail.ru", "Nick Name", "User", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
         assertThat(user).hasFieldOrPropertyWithValue("id", 2);
