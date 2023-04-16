@@ -13,11 +13,10 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -32,56 +31,56 @@ class PropertyDBStorageTest {
             .name("G")
             .build();
 
-    private void create(){
-        Film film = new Film ("nisi eiusmod","adipisicing", LocalDate.of(1967,3,25),100,mpa);
+    private void create() {
+        Film film = new Film("nisi eiusmod", "adipisicing", LocalDate.of(1967, 3, 25), 100, mpa);
         filmStorage.createFilm(film);
-        User user = new User( "mail@mail.ru", "Nick Name", "User1",LocalDate.of(1946,8,20));
+        User user = new User("mail@mail.ru", "Nick Name", "User1", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
     }
 
     @Test
-    void getAllGenres() {
+    void testGetAllGenres() {
         List<Genre> genres = storage.getAllGenres();
-        assertEquals(6,genres.size());
-        assertEquals("Комедия",genres.get(0).getName());
-        assertEquals(1,genres.get(0).getId());
+        assertEquals(6, genres.size());
+        assertEquals("Комедия", genres.get(0).getName());
+        assertEquals(1, genres.get(0).getId());
     }
 
     @Test
-    void getGenre() {
+    void testGetGenre() {
         Genre genre = storage.getGenre(2);
-        assertEquals(2,genre.getId());
-        assertEquals("Драма",genre.getName());
+        assertEquals(2, genre.getId());
+        assertEquals("Драма", genre.getName());
 
     }
 
     @Test
-    void getAllMpa() {
+    void testGetAllMpa() {
         List<MPA> mpa = storage.getAllMpa();
-        assertEquals(5,mpa.size());
-        assertEquals("G",mpa.get(0).getName());
-        assertEquals(1,mpa.get(0).getId());
+        assertEquals(5, mpa.size());
+        assertEquals("G", mpa.get(0).getName());
+        assertEquals(1, mpa.get(0).getId());
     }
 
     @Test
-    void getMpa() {
+    void testGetMpa() {
         MPA mpa = storage.getMpa(2);
-        assertEquals(2,mpa.getId());
-        assertEquals("PG",mpa.getName());
+        assertEquals(2, mpa.getId());
+        assertEquals("PG", mpa.getName());
     }
 
     @Test
-    void addLike() {
+    void testAddLike() {
         create();
-        storage.addLike(1,1);
+        storage.addLike(1, 1);
         Film filmExpect = filmStorage.getFilm(1);
         assertThat(filmExpect).hasFieldOrPropertyWithValue("rate", 1);
     }
 
     @Test
-    void deleteLike() {
+    void testDeleteLike() {
         create();
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         storage.addLike(1, 1);
         storage.addLike(1, 2);
@@ -92,12 +91,12 @@ class PropertyDBStorageTest {
         assertThat(filmExpect).hasFieldOrPropertyWithValue("rate", 1);
     }
 
-        @Test
-    void printTop() {
+    @Test
+    void testPrintTop() {
         create();
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
-        Film film2 = new Film("New film","New film about friends",LocalDate.of(1999,4,30),120, mpa);
+        Film film2 = new Film("New film", "New film about friends", LocalDate.of(1999, 4, 30), 120, mpa);
         filmStorage.createFilm(film2);
         storage.addLike(1, 1);
         storage.addLike(1, 2);

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -34,7 +34,7 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testValidation() {
-        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
         mockMvc.perform(post("/users")
@@ -48,13 +48,13 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongEmail() {
-        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        User invalid = new User(" ", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid = new User(" ", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
-        User invalid2 = new User("ol5ga", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid2 = new User("ol5ga", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         invalid.setId(3);
         String inValidUser2 = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -73,13 +73,13 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongLogin() {
-        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        User invalid = new User("ol5ga@bk.ru", " ", "Ольга",LocalDate.of(1989,2,22));
+        User invalid = new User("ol5ga@bk.ru", " ", "Ольга", LocalDate.of(1989, 2, 22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
-        User invalid2 = new User("ol5ga@bk.ru", "ol5  ga", "Ольга",LocalDate.of(1989,2,22));
+        User invalid2 = new User("ol5ga@bk.ru", "ol5  ga", "Ольга", LocalDate.of(1989, 2, 22));
         invalid.setId(3);
         String inValidUser2 = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -98,10 +98,10 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongName() {
-        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        User invalid = new User("ol5ga@bk.ru", "ol5ga", " ",LocalDate.of(1989,2,22));
+        User invalid = new User("ol5ga@bk.ru", "ol5ga", " ", LocalDate.of(1989, 2, 22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")
@@ -115,10 +115,10 @@ public class UserControllerTest {
     @SneakyThrows
     @Test
     void testWrongBirthday() {
-        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(1989,2,22));
+        User valid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(1989, 2, 22));
         valid.setId(1);
         String validUser = mapper.writeValueAsString(valid);
-        User invalid = new User("ol5ga@bk.ru", "ol5ga", "Ольга",LocalDate.of(2024,2,22));
+        User invalid = new User("ol5ga@bk.ru", "ol5ga", "Ольга", LocalDate.of(2024, 2, 22));
         invalid.setId(2);
         String inValidUser = mapper.writeValueAsString(invalid);
         mockMvc.perform(post("/users")

@@ -8,14 +8,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertEquals;
-
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -27,25 +25,20 @@ class UserDbStorageTest {
 
     @BeforeEach
     void fullDB() {
-    User user = new User( "mail@mail.ru", "Nick Name", "User1",LocalDate.of(1946,8,20));
-    userStorage.createUser(user);
+        User user = new User( "mail@mail.ru", "Nick Name", "User1",LocalDate.of(1946,8,20));
+        userStorage.createUser(user);
     }
 
     @Test
-    void createUser(){
+    void createUser() {
         User user = new User( "mail@mail.ru", "Nick Name", "User",LocalDate.of(1946,8,20));
         userStorage.createUser(user);
         assertThat(user).hasFieldOrPropertyWithValue("id", 2);
         assertThat(user).hasFieldOrPropertyWithValue("name", "User");
     }
+
     @Test
-    public void testGetUser() {
-        User user1 = userStorage.getUser(1);
-        assertThat(user1).hasFieldOrPropertyWithValue("id", 1);
-        assertThat(user1).hasFieldOrPropertyWithValue("name", "User1");
-    }
-    @Test
-    void testUpdateUser(){
+    void updateUser() {
         User update = new User("mail@mail.com","Update","Nick",LocalDate.of(1966,8,20));
         update.setId(1);
         User userExpect = userStorage.updateUser(update);
@@ -53,10 +46,10 @@ class UserDbStorageTest {
         assertThat(userExpect).hasFieldOrPropertyWithValue("email","mail@mail.com");
         assertThat(userExpect).hasFieldOrPropertyWithValue("login","Update");
         assertThat(userExpect).hasFieldOrPropertyWithValue("name","Nick");
-
     }
+
     @Test
-    void TestGetAllUser(){
+    void getAllUser() {
         User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
         userStorage.createUser(user2);
         List<User> allUsers = userStorage.getAllUser();
@@ -66,7 +59,14 @@ class UserDbStorageTest {
     }
 
     @Test
-    void TestAddFriend(){
+    void getUser() {
+        User user1 = userStorage.getUser(1);
+        assertThat(user1).hasFieldOrPropertyWithValue("id", 1);
+        assertThat(user1).hasFieldOrPropertyWithValue("name", "User1");
+    }
+
+    @Test
+    void addFriend() {
         User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
         userStorage.createUser(user2);
         userStorage.addFriend(2,1);
@@ -77,7 +77,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void TestDeleteFriend(){
+    void deleteFriend() {
         User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
         userStorage.createUser(user2);
         userStorage.addFriend(2,1);
@@ -90,7 +90,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void TestPrintFriends(){
+    void printFriends() {
         User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
         userStorage.createUser(user2);
         userStorage.addFriend(2,1);
@@ -101,7 +101,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void TestPrintCommonFriends(){
+    void printCommonFriends() {
         User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
         userStorage.createUser(user2);
         User user3 = new User("friend@common.ru","common","",LocalDate.of(2000,12,20));
@@ -112,7 +112,4 @@ class UserDbStorageTest {
         assertEquals(friend.size(),1);
         assertEquals(friend.get(0),user3);
     }
-
-
 }
-
