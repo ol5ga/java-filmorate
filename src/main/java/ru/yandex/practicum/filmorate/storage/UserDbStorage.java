@@ -59,17 +59,6 @@ public class UserDbStorage implements UserStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToUser);
     }
 
-    private User mapRowToUser(ResultSet resultSet, int i) throws SQLException {
-        User user = new User(
-                resultSet.getString("email"),
-                resultSet.getString("login"),
-                resultSet.getString("name"),
-                resultSet.getDate("birthday").toLocalDate()
-        );
-        user.setId(resultSet.getInt("user_id"));
-        return user;
-    }
-
     @Override
     public User getUser(int id) {
         String sql = "select * from users where user_id = ?";
@@ -128,6 +117,17 @@ public class UserDbStorage implements UserStorage {
                 .filter(printFriends(otherId)::contains)
                 .collect(Collectors.toList());
 
+    }
+
+    private User mapRowToUser(ResultSet resultSet, int i) throws SQLException {
+        User user = new User(
+                resultSet.getString("email"),
+                resultSet.getString("login"),
+                resultSet.getString("name"),
+                resultSet.getDate("birthday").toLocalDate()
+        );
+        user.setId(resultSet.getInt("user_id"));
+        return user;
     }
 
 }

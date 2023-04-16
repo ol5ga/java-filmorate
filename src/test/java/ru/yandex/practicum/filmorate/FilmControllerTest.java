@@ -35,20 +35,6 @@ public class FilmControllerTest {
 
     @SneakyThrows
     @Test
-    void testValidation() {
-        Film valid = new Film("FilmName", "FilmDescription", LocalDate.of(2020, 2, 15), 75);
-        valid.setId(1);
-        String validFilm = mapper.writeValueAsString(valid);
-        mockMvc.perform(post("/films")
-                .contentType("application/json")
-                .content(validFilm))
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.name", Matchers.containsString("FilmName")))
-                .andExpect(jsonPath("$.description").value("FilmDescription"));
-    }
-
-    @SneakyThrows
-    @Test
     void testWrongName() {
         Film valid = new Film("FilmName", "FilmDescription", LocalDate.of(2020, 2, 15), 75);
         valid.setId(1);

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class FilmorateApplicationTests {
+public class FilmorateApplicationTests {
 	@Autowired
 	private MockMvc mockMvc;
 

@@ -1,4 +1,10 @@
-DROP TABLE friends,likes,users, genre, film_genre, MPA, films;
+--DROP TABLE friends,likes,users, genre, film_genre, MPA, films;
+drop table if exists film_genre;
+drop table if exists genre;
+drop table  if exists likes;
+drop table if exists friends;
+drop table if exists films;
+drop table if exists users;
 
 CREATE TABLE IF NOT EXISTS MPA(
     MPA_id INTEGER primary key auto_increment,
