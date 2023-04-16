@@ -24,14 +24,14 @@ class UserDbStorageTest {
     private final UserDbStorage userStorage;
 
     @BeforeEach
-    void fullDB() {
-        User user = new User( "mail@mail.ru", "Nick Name", "User1",LocalDate.of(1946,8,20));
+    void fullDB(){
+        User user = new User("mail@mail.ru", "Nick Name", "User1", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
     }
 
     @Test
-    void createUser() {
-        User user = new User( "mail@mail.ru", "Nick Name", "User",LocalDate.of(1946,8,20));
+    void createUser(){
+        User user = new User("mail@mail.ru", "Nick Name", "User", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
         assertThat(user).hasFieldOrPropertyWithValue("id", 2);
         assertThat(user).hasFieldOrPropertyWithValue("name", "User");
@@ -39,23 +39,23 @@ class UserDbStorageTest {
 
     @Test
     void updateUser() {
-        User update = new User("mail@mail.com","Update","Nick",LocalDate.of(1966,8,20));
+        User update = new User("mail@mail.com", "Update", "Nick", LocalDate.of(1966, 8, 20));
         update.setId(1);
         User userExpect = userStorage.updateUser(update);
-        assertThat(userExpect).hasFieldOrPropertyWithValue("id",1);
-        assertThat(userExpect).hasFieldOrPropertyWithValue("email","mail@mail.com");
-        assertThat(userExpect).hasFieldOrPropertyWithValue("login","Update");
-        assertThat(userExpect).hasFieldOrPropertyWithValue("name","Nick");
+        assertThat(userExpect).hasFieldOrPropertyWithValue("id", 1);
+        assertThat(userExpect).hasFieldOrPropertyWithValue("email", "mail@mail.com");
+        assertThat(userExpect).hasFieldOrPropertyWithValue("login", "Update");
+        assertThat(userExpect).hasFieldOrPropertyWithValue("name", "Nick");
     }
 
     @Test
     void getAllUser() {
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         List<User> allUsers = userStorage.getAllUser();
-        assertEquals(2,allUsers.size());
-        assertThat(allUsers.get(0)).hasFieldOrPropertyWithValue("id",1);
-        assertThat(allUsers.get(1)).hasFieldOrPropertyWithValue("id",2);
+        assertEquals(2, allUsers.size());
+        assertThat(allUsers.get(0)).hasFieldOrPropertyWithValue("id", 1);
+        assertThat(allUsers.get(1)).hasFieldOrPropertyWithValue("id", 2);
     }
 
     @Test
@@ -67,49 +67,49 @@ class UserDbStorageTest {
 
     @Test
     void addFriend() {
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
-        userStorage.addFriend(2,1);
-        assertEquals(userStorage.printFriends(2).size(),1);
-        assertEquals(userStorage.printFriends(1).size(),0);
-        userStorage.addFriend(1,2);
-        assertEquals(userStorage.printFriends(1).size(),1);
+        userStorage.addFriend(2, 1);
+        assertEquals(userStorage.printFriends(2).size(), 1);
+        assertEquals(userStorage.printFriends(1).size(), 0);
+        userStorage.addFriend(1, 2);
+        assertEquals(userStorage.printFriends(1).size(), 1);
     }
 
     @Test
     void deleteFriend() {
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
-        userStorage.addFriend(2,1);
-        userStorage.addFriend(1,2);
-        assertEquals(userStorage.printFriends(1).size(),1);
-        assertEquals(userStorage.printFriends(2).size(),1);
-        userStorage.deleteFriend(1,2);
-        assertEquals(userStorage.printFriends(2).size(),1);
-        assertEquals(userStorage.printFriends(1).size(),0);
+        userStorage.addFriend(2, 1);
+        userStorage.addFriend(1, 2);
+        assertEquals(userStorage.printFriends(1).size(), 1);
+        assertEquals(userStorage.printFriends(2).size(), 1);
+        userStorage.deleteFriend(1, 2);
+        assertEquals(userStorage.printFriends(2).size(), 1);
+        assertEquals(userStorage.printFriends(1).size(), 0);
     }
 
     @Test
     void printFriends() {
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
-        userStorage.addFriend(2,1);
-        userStorage.addFriend(1,2);
+        userStorage.addFriend(2, 1);
+        userStorage.addFriend(1, 2);
         List<User> friend = userStorage.printFriends(1);
-        assertEquals(friend.size(),1);
-        assertEquals(friend.get(0),user2);
+        assertEquals(friend.size(), 1);
+        assertEquals(friend.get(0), user2);
     }
 
     @Test
     void printCommonFriends() {
-        User user2 = new User("friend@mail.ru","friend","Fri",LocalDate.of(1976,8,20));
+        User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
-        User user3 = new User("friend@common.ru","common","",LocalDate.of(2000,12,20));
+        User user3 = new User("friend@common.ru", "common", "", LocalDate.of(2000, 12, 20));
         userStorage.createUser(user3);
-        userStorage.addFriend(2,3);
-        userStorage.addFriend(1,3);
-        List<User> friend = userStorage.printCommonFriends(1,2);
-        assertEquals(friend.size(),1);
-        assertEquals(friend.get(0),user3);
+        userStorage.addFriend(2, 3);
+        userStorage.addFriend(1, 3);
+        List<User> friend = userStorage.printCommonFriends(1, 2);
+        assertEquals(friend.size(), 1);
+        assertEquals(friend.get(0), user3);
     }
 }
