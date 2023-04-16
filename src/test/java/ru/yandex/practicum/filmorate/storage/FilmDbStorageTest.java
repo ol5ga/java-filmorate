@@ -26,8 +26,6 @@ import static org.junit.Assert.assertEquals;
 class FilmDbStorageTest {
 
     private final FilmDbStorage filmStorage;
-
-
     MPA mpa = MPA.builder()
             .id(1)
             .name("G")
