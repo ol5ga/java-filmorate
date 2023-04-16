@@ -76,7 +76,7 @@ public class PropertyDBStorage implements PropertyStorage {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, userId);
         if (userRows.next()) {
             log.info("Лайк пользователя {} фильму {} удален", userId, id);
-            jdbcTemplate.update("delete from likes where film_id = ?", id);
+            jdbcTemplate.update("delete from likes where film_id = ? and user_id = ?", id,userId);
         } else {
             log.info("Пользователь с идентификатором {} не найден.", userId);
             throw new ChangeException("Такого пользователя не существует");
