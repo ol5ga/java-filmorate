@@ -31,13 +31,6 @@ class ParameterDBStorageTest {
             .name("G")
             .build();
 
-    private void create() {
-        Film film = new Film("nisi eiusmod", "adipisicing", LocalDate.of(1967, 3, 25), 100, mpa);
-        filmStorage.createFilm(film);
-        User user = new User("mail@mail.ru", "Nick Name", "User1", LocalDate.of(1946, 8, 20));
-        userStorage.createUser(user);
-    }
-
     @Test
     void testGetAllGenres() {
         List<Genre> genres = storage.getAllGenres();
