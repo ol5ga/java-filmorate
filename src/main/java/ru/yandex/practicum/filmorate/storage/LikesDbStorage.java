@@ -23,6 +23,7 @@ import static java.lang.Integer.compare;
 public class LikesDbStorage implements LikesStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmStorage filmStorage;
+
     @Override
     public void addLike(int id, int userId) {
         String sqlAddLike = "insert into likes (film_id,user_id)" + "values(?,?)";
@@ -35,7 +36,7 @@ public class LikesDbStorage implements LikesStorage {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, userId);
         if (userRows.next()) {
             log.info("Лайк пользователя {} фильму {} удален", userId, id);
-            jdbcTemplate.update("delete from likes where film_id = ? and user_id = ?", id,userId);
+            jdbcTemplate.update("delete from likes where film_id = ? and user_id = ?", id, userId);
         } else {
             log.warn("Пользователь с идентификатором {} не найден.", userId);
             throw new ChangeException("Такого пользователя не существует");

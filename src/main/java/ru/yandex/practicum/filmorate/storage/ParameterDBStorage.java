@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParameterDBStorage implements ParameterStorage {
     private final JdbcTemplate jdbcTemplate;
+
     @Override
     public List<Genre> getAllGenres() {
         String sqlQuery = "select * from genre";

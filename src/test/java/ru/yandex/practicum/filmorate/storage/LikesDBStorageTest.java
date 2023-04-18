@@ -37,6 +37,7 @@ public class LikesDBStorageTest {
         User user = new User("mail@mail.ru", "Nick Name", "User1", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
     }
+
     @Test
     void testAddLike() {
         create();
