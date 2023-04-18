@@ -30,7 +30,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void createUser() {
+    void TestCreateUser() {
         User user = new User("mail@mail.ru", "Nick Name", "User", LocalDate.of(1946, 8, 20));
         userStorage.createUser(user);
         assertThat(user).hasFieldOrPropertyWithValue("id", 2);
@@ -38,7 +38,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void updateUser() {
+    void TestUpdateUser() {
         User update = new User("mail@mail.com", "Update", "Nick", LocalDate.of(1966, 8, 20));
         update.setId(1);
         User userExpect = userStorage.updateUser(update);
@@ -49,7 +49,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void getAllUser() {
+    void TestGetAllUser() {
         User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         List<User> allUsers = userStorage.getAllUser();
@@ -59,14 +59,14 @@ class UserDbStorageTest {
     }
 
     @Test
-    void getUser() {
+    void TestGetUser() {
         User user1 = userStorage.getUser(1);
         assertThat(user1).hasFieldOrPropertyWithValue("id", 1);
         assertThat(user1).hasFieldOrPropertyWithValue("name", "User1");
     }
 
     @Test
-    void addFriend() {
+    void TestAddFriend() {
         User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         userStorage.addFriend(2, 1);
@@ -77,7 +77,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void deleteFriend() {
+    void TestDeleteFriend() {
         User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         userStorage.addFriend(2, 1);
@@ -90,7 +90,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void printFriends() {
+    void TestPrintFriends() {
         User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         userStorage.addFriend(2, 1);
@@ -101,7 +101,7 @@ class UserDbStorageTest {
     }
 
     @Test
-    void printCommonFriends() {
+    void TestPrintCommonFriends() {
         User user2 = new User("friend@mail.ru", "friend", "Fri", LocalDate.of(1976, 8, 20));
         userStorage.createUser(user2);
         User user3 = new User("friend@common.ru", "common", "", LocalDate.of(2000, 12, 20));

@@ -38,7 +38,7 @@ class FilmDbStorageTest {
     }
 
     @Test
-    void createFilm() {
+    void TestCreateFilm() {
         Film film1 = new Film("nisi eiusmod", "adipisicing", LocalDate.of(1967, 3, 25), 100, mpa);
         filmStorage.createFilm(film1);
         assertThat(film1).hasFieldOrPropertyWithValue("id", 2);
@@ -46,7 +46,7 @@ class FilmDbStorageTest {
     }
 
     @Test
-    void updateFilm() {
+    void TestUpdateFilm() {
         Genre genre = Genre.builder()
                 .id(2)
                 .name("Драма")
@@ -64,7 +64,7 @@ class FilmDbStorageTest {
 
 
     @Test
-    void getAllFilms() {
+    void TestGetAllFilms() {
         Film film2 = new Film("New film", "New film about friends", LocalDate.of(1999, 4, 30), 120, mpa);
         filmStorage.createFilm(film2);
         List<Film> allFilms = filmStorage.getAllFilms();
@@ -75,7 +75,7 @@ class FilmDbStorageTest {
     }
 
     @Test
-    void getFilm() {
+    void TestGetFilm() {
         Film filmExpect = filmStorage.getFilm(1);
         assertThat(filmExpect).hasFieldOrPropertyWithValue("id", 1);
         assertThat(filmExpect).hasFieldOrPropertyWithValue("name", "nisi eiusmod");

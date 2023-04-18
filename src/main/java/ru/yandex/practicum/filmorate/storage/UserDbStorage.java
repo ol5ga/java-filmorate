@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,7 +68,7 @@ public class UserDbStorage implements UserStorage {
             log.info("Найден пользователь: {} {}", userRows.getString("user_id"), userRows.getString("login"));
             return jdbcTemplate.queryForObject(sql, this::mapRowToUser, id);
         } else {
-            log.info("Пользователь с идентификатором {} не найден.", id);
+            log.warn("Пользователь с идентификатором {} не найден.", id);
             throw new ChangeException("Такого пользователя не существует");
 
         }

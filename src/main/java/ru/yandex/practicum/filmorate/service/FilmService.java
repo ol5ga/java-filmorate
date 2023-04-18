@@ -3,8 +3,9 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.PropertyDBStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.ParameterDBStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.LikesStorage;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage storage;
-    private final PropertyDBStorage property;
+    private final ParameterDBStorage property;
+
+    private final LikesStorage likesStorage;
 
     public List<Film> getAllFilms() {
         return storage.getAllFilms();
@@ -32,16 +35,16 @@ public class FilmService {
     }
 
     public void addLike(int id, int userId) {
-        property.addLike(id, userId);
+        likesStorage.addLike(id, userId);
     }
 
     public void deleteLike(int id, int userId) {
-        property.deleteLike(id, userId);
+        likesStorage.deleteLike(id, userId);
     }
 
 
     public List<Film> printTop(int count) {
-        return property.printTop(count);
+        return likesStorage.printTop(count);
     }
 
 }

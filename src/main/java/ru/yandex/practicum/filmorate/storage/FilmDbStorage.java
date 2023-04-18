@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -78,7 +79,7 @@ public class FilmDbStorage implements FilmStorage {
             log.info("Найден фильм: {} {}", userRows.getString("film_id"), userRows.getString("name"));
             return jdbcTemplate.queryForObject(sql, this::mapRowToFilm, id);
         } else {
-            log.info("Фильм с идентификатором {} не найден.", id);
+            log.warn("Фильм с идентификатором {} не найден.", id);
             throw new ChangeException("Такого фильма не существует");
 
         }
