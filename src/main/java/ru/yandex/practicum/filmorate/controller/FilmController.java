@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -15,18 +14,16 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmController {
-    private int idGenerate = 0;
     private final FilmService filmService;
 
 
     @GetMapping()
     public List<Film> getAllFilms() {
-        return new ArrayList<Film>(filmService.getAllFilms());
+        return filmService.getAllFilms();
     }
 
     @PostMapping
     public Film create(@RequestBody @Valid Film film) {
-        film.setId(++idGenerate);
         filmService.createFilm(film);
         log.info("Добавление фильма");
         return film;
@@ -43,18 +40,19 @@ public class FilmController {
     public Film getUser(@PathVariable int id) {
         return filmService.getUser(id);
     }
+
     @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable int id, @PathVariable int userId){
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
         filmService.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike(@PathVariable int id, @PathVariable int userId){
+    public void deleteLike(@PathVariable int id, @PathVariable int userId) {
         filmService.deleteLike(id, userId);
     }
 
     @GetMapping("/popular")
-    public List<Film> printTop(@RequestParam (defaultValue = "10") int count){
+    public List<Film> printTop(@RequestParam(defaultValue = "10") int count) {
         return filmService.printTop(count);
     }
 

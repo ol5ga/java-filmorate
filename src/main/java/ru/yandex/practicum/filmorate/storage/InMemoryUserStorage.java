@@ -3,10 +3,13 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.interfaces.UserStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -17,15 +20,6 @@ public class InMemoryUserStorage implements UserStorage {
     public User createUser(User user) {
         allUsers.put(user.getId(), user);
         return user;
-    }
-
-    @Override
-    public void deleteUser(User user) {
-        if (allUsers.containsKey(user.getId())) {
-            allUsers.remove(user.getId());
-        } else {
-            throw new ChangeException("Такого пользователя не существует");
-        }
     }
 
     @Override
@@ -49,5 +43,48 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ChangeException("Такого пользователя не существует");
         }
         return allUsers.get(id);
+    }
+
+    @Override
+    public void addFriend(int id, int friendId) {
+        User user1 = getUser(id);
+        User user2 = getUser(friendId);
+        if (user2.getApplications().contains(id)) {
+            user1.friends.add(friendId);
+            user2.friends.add(id);
+            user2.applications.remove(id);
+        } else {
+            user1.applications.add(friendId);
+        }
+    }
+
+    @Override
+    public void deleteFriend(int id, int friendId) {
+        User user1 = getUser(id);
+        User user2 = getUser(friendId);
+        if (user1.friends.contains(friendId) && user2.friends.contains(id)) {
+            user1.friends.remove(id);
+            user2.friends.remove(friendId);
+        } else {
+            throw new ChangeException("Неверные пользователи");
+        }
+    }
+
+    @Override
+    public List<User> printFriends(int id) {
+        User user = getUser(id);
+        return user.getFriends().stream()
+                .map(this::getUser)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> printCommonFriends(int id, int otherId) {
+        User user1 = getUser(id);
+        User user2 = getUser(otherId);
+        return user1.getFriends().stream()
+                .filter(user2.getFriends()::contains)
+                .map(id1 -> getUser(id1))
+                .collect(Collectors.toList());
     }
 }

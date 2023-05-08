@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -17,7 +16,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
-    private int idGenerate = 0;
     private final UserService userService;
 
     @GetMapping()
@@ -29,7 +27,6 @@ public class UserController {
     public User create(@RequestBody @Valid User user) {
         validate(user);
         user = checkName(user);
-        user.setId(++idGenerate);
         userService.addUser(user);
         log.info("Добавление пользователя");
         return user;

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validate.Release;
 
@@ -17,15 +18,56 @@ public class Film {
 
     private int id;
     @NotBlank
-    private final String name;
+    private String name;
     @Size(max = 200)
     @NotNull
-    private final String description;
+    private String description;
     @NotNull
     @Release
-    private final LocalDate releaseDate;
+    private LocalDate releaseDate;
     @Positive
-    private final int duration;
-    private Set<Integer> likes = new HashSet<>();
+    private int duration;
+    private MPA mpa;
+    private Integer rate;
+    private Set<Genre> genres = new HashSet<>();
+
+
+    public Film(String name, String description, LocalDate releaseDate, int duration) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, MPA mpa) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, MPA mpa, Set<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+        this.genres = genres;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, int duration, Integer likes, MPA mpa, Set<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.rate = likes;
+        this.mpa = mpa;
+        this.genres = genres;
+
+    }
+
+    public Film() {
+    }
 }
 

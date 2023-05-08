@@ -16,15 +16,19 @@ import java.util.Set;
 public class User {
 
     private int id;
+
     @NotBlank
     @Email
     private final String email;
     @NotBlank
     private final String login;
     private final String name;
+
     @PastOrPresent
     @NotNull
     private final LocalDate birthday;
     public Set<Integer> friends = new HashSet<>();
+    public Set<Integer> applications = new HashSet<>();
+
 
 }

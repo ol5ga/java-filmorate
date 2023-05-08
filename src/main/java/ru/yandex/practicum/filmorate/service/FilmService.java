@@ -2,22 +2,21 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.ParameterDBStorage;
+import ru.yandex.practicum.filmorate.storage.interfaces.LikesStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.lang.Integer.compare;
 
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage storage;
+    private final ParameterDBStorage property;
+
+    private final LikesStorage likesStorage;
 
     public List<Film> getAllFilms() {
         return storage.getAllFilms();
@@ -36,36 +35,16 @@ public class FilmService {
     }
 
     public void addLike(int id, int userId) {
-        Film film = storage.getFilm(id);
-        Set<Integer> like = film.getLikes();
-        like.add(userId);
-        film.setLikes(like);
+        likesStorage.addLike(id, userId);
     }
 
     public void deleteLike(int id, int userId) {
-        Film film = storage.getFilm(id);
-        Set<Integer> like = film.getLikes();
-        if (like.contains(userId)) {
-            like.remove(userId);
-        } else {
-            throw new ChangeException("Такого пользователя не существует");
-        }
-        film.setLikes(like);
+        likesStorage.deleteLike(id, userId);
     }
 
 
     public List<Film> printTop(int count) {
-        List<Film> films = new ArrayList<>(storage.getAllFilms());
-        if (count > films.size()) {
-            count = films.size();
-        }
-        return films.stream()
-                .sorted((p0, p1) -> {
-                    int comp = compare(p0.getLikes().size(), p1.getLikes().size());
-                    return -1 * comp;
-                }).limit(count)
-                .collect(Collectors.toList());
-
+        return likesStorage.printTop(count);
     }
 
 }

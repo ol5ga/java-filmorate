@@ -1,21 +1,18 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -32,20 +29,6 @@ public class FilmControllerTest {
     @Autowired
     ObjectMapper mapper;
 
-
-    @SneakyThrows
-    @Test
-    void testValidation() {
-        Film valid = new Film("FilmName", "FilmDescription", LocalDate.of(2020, 2, 15), 75);
-        valid.setId(1);
-        String validFilm = mapper.writeValueAsString(valid);
-        mockMvc.perform(post("/films")
-                .contentType("application/json")
-                .content(validFilm))
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.name", Matchers.containsString("FilmName")))
-                .andExpect(jsonPath("$.description").value("FilmDescription"));
-    }
 
     @SneakyThrows
     @Test

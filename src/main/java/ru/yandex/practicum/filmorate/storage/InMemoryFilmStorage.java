@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ChangeException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.interfaces.FilmStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
-    @Override
+
     public void deleteFilm(Film film) {
         if (allFilms.containsKey(film.getId())) {
             allFilms.remove(film.getId());
