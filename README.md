@@ -56,28 +56,33 @@ _status_ - статус дружбы: подтвержденная, неподт
 
 ### Примеры запросов  
 **Список подтвержденных друзей пользователя с id = 1**  
-SELECT friend_id  
-FROM friends  
-WHERE user_id = 1  
-AND status = 'confirmed';  
+
+    SELECT friend_id  
+    FROM friends  
+    WHERE user_id = 1  
+    AND status = 'confirmed';  
+
+  
   
 
 **10 фильмов с максимальным количеством лайков**  
-SELECT f.name  
-FROM films AS f  
-RIGHT OUTER JOIN likes AS l ON f.film_id = l.film_id  
-GROUP BY l.film_id  
-ORDER BY SUM(user_id) DESC  
-LIMIT 10;  
+
+    SELECT f.name  
+    FROM films AS f  
+    RIGHT OUTER JOIN likes AS l ON f.film_id = l.film_id  
+    GROUP BY l.film_id  
+    ORDER BY SUM(user_id) DESC  
+    LIMIT 10;  
 
   
 **Список комедий**  
-SELECT name  
-FROM films  
-WHERE film_id IN (SELECT fg.film_id  
-FROM film_genre AS fg  
-RIGHT OUTER JOIN genre AS g ON fg.genre_id = g.genre_id  
-WHERE g.genre = 'COMEDY');  
+
+    SELECT name  
+    FROM films  
+    WHERE film_id IN (SELECT fg.film_id  
+    FROM film_genre AS fg  
+    RIGHT OUTER JOIN genre AS g ON fg.genre_id = g.genre_id  
+    WHERE g.genre = 'COMEDY');  
 
 
 ### Стек:
